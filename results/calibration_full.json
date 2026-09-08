@@ -1,0 +1,53 @@
+{
+  "mode": "output_file",
+  "output_file": "llm_enhanced_sast.json",
+  "total_findings": 2410,
+  "counts": {
+    "escalate": 2296,
+    "defer": 114,
+    "legacy_no_triage": 0,
+    "escalated_without_analysis": 0
+  },
+  "metrics": {
+    "tp_recall": 1.0,
+    "false_negatives": 0,
+    "escalation_rate": 0.9527,
+    "deferral_rate": 0.0473
+  },
+  "false_negative_keys": [],
+  "labels": {
+    "joined": 2258,
+    "tp": 1594,
+    "fp": 664
+  },
+  "robust_verdicts_by_label": {
+    "true positive": {
+      "tp": 1534,
+      "fp": 575
+    },
+    "inconclusive": {
+      "tp": 19,
+      "fp": 7
+    },
+    "false positive": {
+      "tp": 41,
+      "fp": 60
+    }
+  },
+  "deep_model": {
+    "escalated": 2296,
+    "pending": 2296,
+    "batches": 460,
+    "batch_failures": 0,
+    "retried_sub_batches": 0,
+    "seconds": 13857.774302959442,
+    "backend": "anthropic",
+    "model": "claude-haiku-4-5",
+    "analysed": 2296,
+    "unanalysed": 0
+  },
+  "estimated_savings": {
+    "deep_model_findings_avoided": 114,
+    "deep_model_calls_avoided": 6
+  }
+}

@@ -1,0 +1,16 @@
+# Install the package (editable) and its dependencies:
+#     python -m pip install -e .
+#
+# This file lists the same runtime deps for environments that prefer `pip install -r`.
+anthropic
+langchain-core
+langchain-ollama
+langchain-chroma
+langchain-community
+langchain-huggingface
+numpy
+pandas
+matplotlib
+scikit-learn
+sentence-transformers
+ipython

@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+build/
+dist/
+src/*.egg-info/
+
+# Editable-install marker
+src/sast_triage.egg-info/
+
+# Vector store
+chroma_db/
+
+# Secrets
+.env
+
+# Generated during a run (kept ones are committed explicitly)
+results/triage_report.json
+results/calibration_report.json
+results/llm_enhanced_sast.json
+results/llm_enhanced_sast_highest_confidence.json
+progress/llm_enhanced_progress.json
+progress/*.tmp
+llm_analysis_raw_batch_*.txt
+
+# Experiment scratch
+results/experiments/
+progress/experiments/
+data/semgrep/Semgrep-subset.json
+data/semgrep/Semgrep-smoke.json
+data/labels/to_review.jsonl

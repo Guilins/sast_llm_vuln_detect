@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sast-triage"
+version = "1.0.0"
+description = "Hierarchical SAST finding triage: static triage -> cheap-model screen -> robust LLM analysis"
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic",
+    "langchain-core",
+    "langchain-ollama",
+    "numpy",
+    "pandas",
+    "matplotlib",
+]
+
+[project.scripts]
+sast-triage = "sast_triage.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

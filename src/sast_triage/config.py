@@ -36,6 +36,11 @@ DEFAULT_ANTHROPIC_MODEL = "claude-haiku-4-5"
 
 BACKEND_OLLAMA = "ollama"
 BACKEND_ANTHROPIC = "anthropic"
+BACKEND_MUSE_SPARK = "muse-spark"
+BACKEND_DEEPSEEK = "deepseek"
+
+DEFAULT_MUSE_SPARK_MODEL = "muse-spark-1.3"
+DEFAULT_DEEPSEEK_MODEL = "deepseek-flash"
 
 
 @dataclass
@@ -49,8 +54,15 @@ class PipelineConfig:
     labels_file: Path = DEFAULT_LABELS_FILE
 
     # Robust (deep) model
-    backend: str = BACKEND_OLLAMA          # "ollama" | "anthropic"
+    backend: str = BACKEND_OLLAMA          # "ollama" | "anthropic" | "muse-spark" | "deepseek"
     robust_model: str = DEFAULT_ROBUST_MODEL     # Ollama model tag
+    muse_spark_api_key: Optional[str] = None
+    muse_spark_model: str = DEFAULT_MUSE_SPARK_MODEL
+    muse_spark_max_tokens: int = 8192      # reasoning tokens share this budget - keep generous
+    muse_spark_reasoning_effort: Optional[str] = None  # unconfirmed param name; pass-through only
+    deepseek_api_key: Optional[str] = None
+    deepseek_model: str = DEFAULT_DEEPSEEK_MODEL
+    deepseek_max_tokens: int = 8192
     anthropic_model: str = DEFAULT_ANTHROPIC_MODEL
     anthropic_max_tokens: int = 16000     # room for thinking tokens + the batch's analyses
     anthropic_workspace_id: Optional[str] = None   # for keys not scoped to a workspace
@@ -68,6 +80,8 @@ class PipelineConfig:
     # large and models silently drop findings from big batches.
     batch_size: int = 20
     num_ctx: int = 32768
+    ollama_think: bool = False   # enable reasoning/thinking mode for local models (slower)
+    ollama_num_predict: Optional[int] = None  # cap on local-model output tokens; None -> auto from batch_size
     timeout: int = 600           # seconds per deep-model call
     max_retries: int = 2         # retry timed-out / empty batches
 
@@ -100,14 +114,22 @@ class PipelineConfig:
         return replace(self, **changes)
 
     def effective_robust_model(self) -> str:
-        return self.anthropic_model if self.backend == BACKEND_ANTHROPIC else self.robust_model
+        if self.backend == BACKEND_ANTHROPIC:
+            return self.anthropic_model
+        if self.backend == BACKEND_MUSE_SPARK:
+            return self.muse_spark_model
+        if self.backend == BACKEND_DEEPSEEK:
+            return self.deepseek_model
+        return self.robust_model
 
     def effective_small_model(self) -> str:
         return (self.small_anthropic_model if self.small_backend == BACKEND_ANTHROPIC
                 else self.small_model)
 
     def concurrency(self) -> int:
-        return self.api_concurrency if self.backend == BACKEND_ANTHROPIC else 1
+        return (self.api_concurrency
+                if self.backend in (BACKEND_ANTHROPIC, BACKEND_MUSE_SPARK, BACKEND_DEEPSEEK)
+                else 1)
 
     def small_concurrency(self) -> int:
         return self.api_concurrency if self.small_backend == BACKEND_ANTHROPIC else 1
@@ -130,6 +152,8 @@ class PipelineConfig:
             "anthropic_thinking": self.anthropic_thinking if self.backend == BACKEND_ANTHROPIC else None,
             "anthropic_effort": self.anthropic_effort if self.backend == BACKEND_ANTHROPIC else None,
             "anthropic_structured": self.anthropic_structured if self.backend == BACKEND_ANTHROPIC else None,
+            "muse_spark_reasoning_effort": (self.muse_spark_reasoning_effort
+                                            if self.backend == BACKEND_MUSE_SPARK else None),
             "cross_file_context": self.cross_file_context,
             "auto_confirm_classes": sorted(self.auto_confirm_classes or ()),
             "enable_small_model": self.enable_small_model,
@@ -158,6 +182,13 @@ class PipelineConfig:
             "anthropic_thinking": self.anthropic_thinking,
             "anthropic_effort": self.anthropic_effort,
             "anthropic_structured": self.anthropic_structured,
+            "muse_spark_model": self.muse_spark_model,
+            "muse_spark_max_tokens": self.muse_spark_max_tokens,
+            "muse_spark_reasoning_effort": self.muse_spark_reasoning_effort,
+            "muse_spark_api_key_set": bool(self.muse_spark_api_key),
+            "deepseek_model": self.deepseek_model,
+            "deepseek_max_tokens": self.deepseek_max_tokens,
+            "deepseek_api_key_set": bool(self.deepseek_api_key),
             "cross_file_context": self.cross_file_context,
             "auto_confirm_classes": list(self.auto_confirm_classes or ()),
             "anthropic_workspace_id_set": bool(self.anthropic_workspace_id),

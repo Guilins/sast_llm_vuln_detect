@@ -78,8 +78,12 @@ def answer_question(config: Optional[PipelineConfig] = None, llm=None, small_llm
             config.effective_small_model(), config.use_batch_api)
     if deep_stats.get("token_usage"):
         tu = deep_stats["token_usage"]
-        log(f"  robust tokens: {tu['input_tokens']:,} in ({tu['cache_read_tokens']:,} cached) + "
-            f"{tu['output_tokens']:,} out  ~${tu.get('cost_usd', 0):.2f}")
+        cached = tu.get("cache_read_tokens", 0)
+        reasoning = tu.get("reasoning_tokens")
+        log(f"  robust tokens: {tu['input_tokens']:,} in ({cached:,} cached) + "
+            f"{tu['output_tokens']:,} out"
+            + (f" ({reasoning:,} reasoning)" if reasoning else "")
+            + f"  ~${tu.get('cost_usd', 0):.2f}")
 
     final_output = assemble_output(json_file, results, run, progress, config, deep_stats)
     with open(config.output_file, "w") as f:

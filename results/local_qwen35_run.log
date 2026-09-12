@@ -1,0 +1,715 @@
+/home/Deus/Projects/sast_vuln_detect/.venv/lib64/python3.14/site-packages/langchain_core/_api/deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+[Step 1] Loading SAST results...
+  2410 findings (config fingerprint 1e89e29a6aa84d0e)
+[Step 2] Static triage...
+  escalate=2410 defer=0  (3.05s)
+[Step 3] Robust model: ollama/qwen3.5:9b — 2410 findings pending
+  auto-confirmed 668 findings in ['cookie', 'cryptographic', 'hashing'] (no LLM call)
+  built cross-file index: 2769 classes (0.5s)
+  2410 escalated (668 auto-confirmed), 0 already analysed, 1742 to the model in batches of 3
+  Batch 1/581 (3 findings)...   batch 1: ✅ 3/3
+  Batch 2/581 (3 findings)...   batch 2: ✅ 3/3
+  Batch 3/581 (3 findings)...   batch 3: ✅ 3/3
+  Batch 4/581 (3 findings)...   batch 4: ✅ 3/3
+  Batch 5/581 (3 findings)...   batch 5: ✅ 3/3
+  Batch 6/581 (3 findings)...   batch 6: ✅ 3/3
+  Batch 7/581 (3 findings)...   batch 7: ✅ 3/3
+  Batch 8/581 (3 findings)...   batch 8: ✅ 3/3
+  Batch 9/581 (3 findings)...   batch 9: ✅ 3/3
+  Batch 10/581 (3 findings)...   batch 10: ✅ 3/3
+  Batch 11/581 (3 findings)...   batch 11: ✅ 3/3
+  Batch 12/581 (3 findings)...   batch 12: ✅ 3/3
+  Batch 13/581 (3 findings)...   batch 13: ✅ 3/3
+  Batch 14/581 (3 findings)...   batch 14: ✅ 3/3
+  Batch 15/581 (3 findings)...   batch 15: ✅ 3/3
+  Batch 16/581 (3 findings)...   batch 16: ✅ 3/3
+  Batch 17/581 (3 findings)...   batch 17: ✅ 3/3
+  Batch 18/581 (3 findings)...   batch 18: ✅ 3/3
+  Batch 19/581 (3 findings)...   batch 19: ✅ 3/3
+  Batch 20/581 (3 findings)...   batch 20: ✅ 3/3
+  Batch 21/581 (3 findings)...   batch 21: ✅ 3/3
+  Batch 22/581 (3 findings)...   batch 22: ✅ 3/3
+  Batch 23/581 (3 findings)...   batch 23: ✅ 3/3
+  Batch 24/581 (3 findings)...   batch 24: ✅ 3/3
+  Batch 25/581 (3 findings)...   batch 25: ✅ 3/3
+  Batch 26/581 (3 findings)...   batch 26: ✅ 3/3
+  Batch 27/581 (3 findings)...   batch 27: ✅ 3/3
+  Batch 28/581 (3 findings)...   batch 28: ✅ 3/3
+  Batch 29/581 (3 findings)...   batch 29: ✅ 3/3
+  Batch 30/581 (3 findings)...   batch 30: ✅ 3/3
+  Batch 31/581 (3 findings)...   batch 31: ✅ 3/3
+  Batch 32/581 (3 findings)...   batch 32: ✅ 3/3
+  Batch 33/581 (3 findings)...   batch 33: ✅ 3/3
+  Batch 34/581 (3 findings)...   batch 34: ✅ 3/3
+  Batch 35/581 (3 findings)...   batch 35: ✅ 3/3
+  Batch 36/581 (3 findings)...   batch 36: ✅ 3/3
+  Batch 37/581 (3 findings)...   batch 37: ✅ 3/3
+  Batch 38/581 (3 findings)...   batch 38: ✅ 3/3
+  Batch 39/581 (3 findings)...   batch 39: ✅ 3/3
+  Batch 40/581 (3 findings)...   batch 40: ✅ 3/3
+  Batch 41/581 (3 findings)...   batch 41: ✅ 3/3
+  Batch 42/581 (3 findings)...   batch 42: ✅ 3/3
+  Batch 43/581 (3 findings)...   batch 43: ✅ 3/3
+  Batch 44/581 (3 findings)...   batch 44: ✅ 3/3
+  Batch 45/581 (3 findings)...   batch 45: ✅ 3/3
+  Batch 46/581 (3 findings)...   batch 46: ✅ 3/3
+  Batch 47/581 (3 findings)...   batch 47: ✅ 3/3
+  Batch 48/581 (3 findings)...   batch 48: ✅ 3/3
+  Batch 49/581 (3 findings)...   batch 49: ✅ 3/3
+  Batch 50/581 (3 findings)...   batch 50: ✅ 3/3
+  Batch 51/581 (3 findings)...   batch 51: ✅ 3/3
+  Batch 52/581 (3 findings)...   batch 52: ✅ 3/3
+  Batch 53/581 (3 findings)...   batch 53: ✅ 3/3
+  Batch 54/581 (3 findings)...   batch 54: ✅ 3/3
+  Batch 55/581 (3 findings)...   batch 55: ✅ 3/3
+  Batch 56/581 (3 findings)...   batch 56: ✅ 3/3
+  Batch 57/581 (3 findings)...   batch 57: ✅ 3/3
+  Batch 58/581 (3 findings)...   batch 58: ✅ 3/3
+  Batch 59/581 (3 findings)...   batch 59: ✅ 3/3
+  Batch 60/581 (3 findings)...   batch 60: ✅ 3/3
+  Batch 61/581 (3 findings)...   batch 61: ✅ 3/3
+  Batch 62/581 (3 findings)...   batch 62: ✅ 3/3
+  Batch 63/581 (3 findings)...   batch 63: ✅ 3/3
+  Batch 64/581 (3 findings)...   batch 64: ✅ 3/3
+  Batch 65/581 (3 findings)...   batch 65: ✅ 3/3
+  Batch 66/581 (3 findings)...   batch 66: ✅ 3/3
+  Batch 67/581 (3 findings)...   batch 67: ✅ 3/3
+  Batch 68/581 (3 findings)...   batch 68: ✅ 3/3
+  Batch 69/581 (3 findings)...   batch 69: ✅ 3/3
+  Batch 70/581 (3 findings)...   batch 70: ✅ 3/3
+  Batch 71/581 (3 findings)...   batch 71: ✅ 3/3
+  Batch 72/581 (3 findings)...   batch 72: ✅ 3/3
+  Batch 73/581 (3 findings)...   batch 73: ✅ 3/3
+  Batch 74/581 (3 findings)...   batch 74: ✅ 3/3
+  Batch 75/581 (3 findings)...   batch 75: ✅ 3/3
+  Batch 76/581 (3 findings)...   batch 76: ✅ 3/3
+  Batch 77/581 (3 findings)...   batch 77: ✅ 3/3
+  Batch 78/581 (3 findings)...   batch 78: ✅ 3/3
+  Batch 79/581 (3 findings)...   batch 79: ✅ 3/3
+  Batch 80/581 (3 findings)...   batch 80: ✅ 3/3
+  Batch 81/581 (3 findings)...   batch 81: ✅ 3/3
+  Batch 82/581 (3 findings)...   batch 82: ✅ 3/3
+  Batch 83/581 (3 findings)...   batch 83: ✅ 3/3
+  Batch 84/581 (3 findings)...   batch 84: ✅ 3/3
+  Batch 85/581 (3 findings)...   batch 85: ✅ 3/3
+  Batch 86/581 (3 findings)...   batch 86: ✅ 3/3
+  Batch 87/581 (3 findings)...   batch 87: ✅ 3/3
+  Batch 88/581 (3 findings)...   batch 88: ✅ 3/3
+  Batch 89/581 (3 findings)...   batch 89: ✅ 3/3
+  Batch 90/581 (3 findings)...   batch 90: ✅ 3/3
+  Batch 91/581 (3 findings)...   batch 91: ✅ 3/3
+  Batch 92/581 (3 findings)...   batch 92: ✅ 3/3
+  Batch 93/581 (3 findings)...   batch 93: ✅ 3/3
+  Batch 94/581 (3 findings)...   batch 94: ✅ 3/3
+  Batch 95/581 (3 findings)...   batch 95: ✅ 3/3
+  Batch 96/581 (3 findings)...   batch 96: ✅ 3/3
+  Batch 97/581 (3 findings)...   batch 97: ✅ 3/3
+  Batch 98/581 (3 findings)...   batch 98: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 99/581 (3 findings)...   batch 99: ✅ 3/3
+  Batch 100/581 (3 findings)...   batch 100: ✅ 3/3
+  Batch 101/581 (3 findings)...   batch 101: ✅ 3/3
+  Batch 102/581 (3 findings)...   batch 102: ✅ 3/3
+  Batch 103/581 (3 findings)...   batch 103: ✅ 3/3
+  Batch 104/581 (3 findings)...   batch 104: ✅ 3/3
+  Batch 105/581 (3 findings)...   batch 105: ✅ 3/3
+  Batch 106/581 (3 findings)...   batch 106: ✅ 3/3
+  Batch 107/581 (3 findings)...   batch 107: ✅ 3/3
+  Batch 108/581 (3 findings)...   batch 108: ✅ 3/3
+  Batch 109/581 (3 findings)...   batch 109: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 110/581 (3 findings)...   batch 110: ✅ 3/3
+  Batch 111/581 (3 findings)...   batch 111: ✅ 3/3
+  Batch 112/581 (3 findings)...   batch 112: ✅ 3/3
+  Batch 113/581 (3 findings)...   batch 113: ✅ 3/3
+  Batch 114/581 (3 findings)...   batch 114: ✅ 3/3
+  Batch 115/581 (3 findings)...   batch 115: ✅ 3/3
+  Batch 116/581 (3 findings)...   batch 116: ✅ 3/3
+  Batch 117/581 (3 findings)...   batch 117: ✅ 3/3
+  Batch 118/581 (3 findings)...   batch 118: ✅ 3/3
+  Batch 119/581 (3 findings)...   batch 119: ✅ 3/3
+  Batch 120/581 (3 findings)...   batch 120: ✅ 3/3
+  Batch 121/581 (3 findings)...   batch 121: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 122/581 (3 findings)...   batch 122: ✅ 3/3
+  Batch 123/581 (3 findings)...   batch 123: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 124/581 (3 findings)...   batch 124: ✅ 3/3
+  Batch 125/581 (3 findings)...   batch 125: ✅ 3/3
+  Batch 126/581 (3 findings)...   batch 126: ✅ 3/3
+  Batch 127/581 (3 findings)...   batch 127: ✅ 3/3
+  Batch 128/581 (3 findings)...   batch 128: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 129/581 (3 findings)...   batch 129: ✅ 3/3
+  Batch 130/581 (3 findings)...   batch 130: ✅ 3/3
+  Batch 131/581 (3 findings)...   batch 131: ✅ 3/3
+  Batch 132/581 (3 findings)...   batch 132: ✅ 3/3
+  Batch 133/581 (3 findings)...   batch 133: ✅ 3/3
+  Batch 134/581 (3 findings)...   batch 134: ✅ 3/3
+  Batch 135/581 (3 findings)...   batch 135: ✅ 3/3
+  Batch 136/581 (3 findings)...   batch 136: ✅ 3/3
+  Batch 137/581 (3 findings)...   batch 137: ✅ 3/3
+  Batch 138/581 (3 findings)...   batch 138: ✅ 3/3
+  Batch 139/581 (3 findings)...   batch 139: ✅ 3/3
+  Batch 140/581 (3 findings)...   batch 140: ✅ 3/3
+  Batch 141/581 (3 findings)...   batch 141: ✅ 3/3
+  Batch 142/581 (3 findings)...   batch 142: ✅ 3/3
+  Batch 143/581 (3 findings)...   batch 143: ✅ 3/3
+  Batch 144/581 (3 findings)...   batch 144: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 145/581 (3 findings)...   batch 145: ✅ 3/3
+  Batch 146/581 (3 findings)...   batch 146: ✅ 3/3
+  Batch 147/581 (3 findings)...   batch 147: ✅ 3/3
+  Batch 148/581 (3 findings)...   batch 148: ✅ 3/3
+  Batch 149/581 (3 findings)...   batch 149: ✅ 3/3
+  Batch 150/581 (3 findings)...   batch 150: ✅ 3/3
+  Batch 151/581 (3 findings)...   batch 151: ✅ 3/3
+  Batch 152/581 (3 findings)...   batch 152: ✅ 3/3
+  Batch 153/581 (3 findings)...   batch 153: ✅ 3/3
+  Batch 154/581 (3 findings)...   batch 154: ✅ 3/3
+  Batch 155/581 (3 findings)...   batch 155: ✅ 3/3
+  Batch 156/581 (3 findings)...   batch 156: ✅ 3/3
+  Batch 157/581 (3 findings)...   batch 157: ✅ 3/3
+  Batch 158/581 (3 findings)...   batch 158: ✅ 3/3
+  Batch 159/581 (3 findings)...   batch 159: ✅ 3/3
+  Batch 160/581 (3 findings)...   batch 160: ✅ 3/3
+  Batch 161/581 (3 findings)...   batch 161: ✅ 3/3
+  Batch 162/581 (3 findings)...   batch 162: ✅ 3/3
+  Batch 163/581 (3 findings)...   batch 163: ✅ 3/3
+  Batch 164/581 (3 findings)...   batch 164: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 165/581 (3 findings)...   batch 165: ✅ 3/3
+  Batch 166/581 (3 findings)...   batch 166: ✅ 3/3
+  Batch 167/581 (3 findings)...   batch 167: ✅ 3/3
+  Batch 168/581 (3 findings)...   batch 168: ✅ 3/3
+  Batch 169/581 (3 findings)...   batch 169: ✅ 3/3
+  Batch 170/581 (3 findings)...   batch 170: ✅ 3/3
+  Batch 171/581 (3 findings)...   batch 171: ✅ 3/3
+  Batch 172/581 (3 findings)...   batch 172: ✅ 3/3
+  Batch 173/581 (3 findings)...   batch 173: ✅ 3/3
+  Batch 174/581 (3 findings)...   batch 174: ✅ 3/3
+  Batch 175/581 (3 findings)...   batch 175: ✅ 3/3
+  Batch 176/581 (3 findings)...   batch 176: ✅ 3/3
+  Batch 177/581 (3 findings)...   batch 177: ✅ 3/3
+  Batch 178/581 (3 findings)...   batch 178: ✅ 3/3
+  Batch 179/581 (3 findings)...   batch 179: ✅ 3/3
+  Batch 180/581 (3 findings)...   batch 180: ✅ 3/3
+  Batch 181/581 (3 findings)...   batch 181: ✅ 3/3
+  Batch 182/581 (3 findings)...   batch 182: ✅ 3/3
+  Batch 183/581 (3 findings)...   batch 183: ✅ 3/3
+  Batch 184/581 (3 findings)...   batch 184: ✅ 3/3
+  Batch 185/581 (3 findings)...   batch 185: ✅ 3/3
+  Batch 186/581 (3 findings)...   batch 186: ✅ 3/3
+  Batch 187/581 (3 findings)...   batch 187: ✅ 3/3
+  Batch 188/581 (3 findings)...   batch 188: ✅ 3/3
+  Batch 189/581 (3 findings)...   batch 189: ✅ 3/3
+  Batch 190/581 (3 findings)...   batch 190: ✅ 3/3
+  Batch 191/581 (3 findings)...   batch 191: ✅ 3/3
+  Batch 192/581 (3 findings)...   batch 192: ✅ 3/3
+  Batch 193/581 (3 findings)...   batch 193: ✅ 3/3
+  Batch 194/581 (3 findings)...   batch 194: ✅ 3/3
+  Batch 195/581 (3 findings)...   batch 195: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 196/581 (3 findings)...   batch 196: ✅ 3/3
+  Batch 197/581 (3 findings)...   batch 197: ✅ 3/3
+  Batch 198/581 (3 findings)...   batch 198: ✅ 3/3
+  Batch 199/581 (3 findings)...   batch 199: ✅ 3/3
+  Batch 200/581 (3 findings)...   batch 200: ✅ 3/3
+  Batch 201/581 (3 findings)...   batch 201: ✅ 3/3
+  Batch 202/581 (3 findings)...   batch 202: ✅ 3/3
+  Batch 203/581 (3 findings)...   batch 203: ✅ 3/3
+  Batch 204/581 (3 findings)...   batch 204: ✅ 3/3
+  Batch 205/581 (3 findings)...   batch 205: ✅ 3/3
+  Batch 206/581 (3 findings)...   batch 206: ✅ 3/3
+  Batch 207/581 (3 findings)...   batch 207: ✅ 3/3
+  Batch 208/581 (3 findings)...   batch 208: ✅ 3/3
+  Batch 209/581 (3 findings)...   batch 209: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 210/581 (3 findings)...   batch 210: ✅ 3/3
+  Batch 211/581 (3 findings)...   batch 211: ✅ 3/3
+  Batch 212/581 (3 findings)...   batch 212: ✅ 3/3
+  Batch 213/581 (3 findings)...   batch 213: ✅ 3/3
+  Batch 214/581 (3 findings)...   batch 214: ✅ 3/3
+  Batch 215/581 (3 findings)...   batch 215: ✅ 3/3
+  Batch 216/581 (3 findings)...   batch 216: ✅ 3/3
+  Batch 217/581 (3 findings)...   batch 217: ✅ 3/3
+  Batch 218/581 (3 findings)...   batch 218: ✅ 3/3
+  Batch 219/581 (3 findings)...   batch 219: ✅ 3/3
+  Batch 220/581 (3 findings)...   batch 220: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 221/581 (3 findings)...   batch 221: ✅ 3/3
+  Batch 222/581 (3 findings)...   batch 222: ✅ 3/3
+  Batch 223/581 (3 findings)...   batch 223: ✅ 3/3
+  Batch 224/581 (3 findings)...   batch 224: ✅ 3/3
+  Batch 225/581 (3 findings)...   batch 225: ✅ 3/3
+  Batch 226/581 (3 findings)...   batch 226: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 227/581 (3 findings)...   batch 227: ✅ 3/3
+  Batch 228/581 (3 findings)...   batch 228: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 229/581 (3 findings)...   batch 229: ✅ 3/3
+  Batch 230/581 (3 findings)...   batch 230: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 231/581 (3 findings)...   batch 231: ✅ 3/3
+  Batch 232/581 (3 findings)...   batch 232: ✅ 3/3
+  Batch 233/581 (3 findings)...   batch 233: ✅ 3/3
+  Batch 234/581 (3 findings)...   batch 234: ✅ 3/3
+  Batch 235/581 (3 findings)...   batch 235: ✅ 3/3
+  Batch 236/581 (3 findings)...   batch 236: ✅ 3/3
+  Batch 237/581 (3 findings)...   batch 237: ✅ 3/3
+  Batch 238/581 (3 findings)...   batch 238: ✅ 3/3
+  Batch 239/581 (3 findings)...   batch 239: ✅ 3/3
+  Batch 240/581 (3 findings)...   batch 240: ✅ 3/3
+  Batch 241/581 (3 findings)...   batch 241: ✅ 3/3
+  Batch 242/581 (3 findings)...   batch 242: ✅ 3/3
+  Batch 243/581 (3 findings)...   batch 243: ✅ 3/3
+  Batch 244/581 (3 findings)...   batch 244: ✅ 3/3
+  Batch 245/581 (3 findings)...   batch 245: ✅ 3/3
+  Batch 246/581 (3 findings)...   batch 246: ✅ 3/3
+  Batch 247/581 (3 findings)...   batch 247: ✅ 3/3
+  Batch 248/581 (3 findings)...   batch 248: ✅ 3/3
+  Batch 249/581 (3 findings)...   batch 249: ✅ 3/3
+  Batch 250/581 (3 findings)...   batch 250: ✅ 3/3
+  Batch 251/581 (3 findings)...   batch 251: ✅ 3/3
+  Batch 252/581 (3 findings)...   batch 252: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 253/581 (3 findings)...   batch 253: ✅ 3/3
+  Batch 254/581 (3 findings)...   batch 254: ✅ 3/3
+  Batch 255/581 (3 findings)...   batch 255: ✅ 3/3
+  Batch 256/581 (3 findings)...   batch 256: ✅ 3/3
+  Batch 257/581 (3 findings)...   batch 257: ✅ 3/3
+  Batch 258/581 (3 findings)...   batch 258: ✅ 3/3
+  Batch 259/581 (3 findings)...   batch 259: ✅ 3/3
+  Batch 260/581 (3 findings)...   batch 260: ✅ 3/3
+  Batch 261/581 (3 findings)...   batch 261: ✅ 3/3
+  Batch 262/581 (3 findings)...   batch 262: ✅ 3/3
+  Batch 263/581 (3 findings)...   batch 263: ✅ 3/3
+  Batch 264/581 (3 findings)...   batch 264: ✅ 3/3
+  Batch 265/581 (3 findings)...   batch 265: ✅ 3/3
+  Batch 266/581 (3 findings)...   batch 266: ✅ 3/3
+  Batch 267/581 (3 findings)...   batch 267: ✅ 3/3
+  Batch 268/581 (3 findings)...   batch 268: ✅ 3/3
+  Batch 269/581 (3 findings)...   batch 269: ✅ 3/3
+  Batch 270/581 (3 findings)...   batch 270: ✅ 3/3
+  Batch 271/581 (3 findings)...   batch 271: ✅ 3/3
+  Batch 272/581 (3 findings)...   batch 272: ✅ 3/3
+  Batch 273/581 (3 findings)...   batch 273: ✅ 3/3
+  Batch 274/581 (3 findings)...   batch 274: ✅ 3/3
+  Batch 275/581 (3 findings)...   batch 275: ✅ 3/3
+  Batch 276/581 (3 findings)...   batch 276: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 277/581 (3 findings)...   batch 277: ✅ 3/3
+  Batch 278/581 (3 findings)...   batch 278: ✅ 3/3
+  Batch 279/581 (3 findings)...   batch 279: ✅ 3/3
+  Batch 280/581 (3 findings)...   batch 280: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 281/581 (3 findings)...   batch 281: ✅ 3/3
+  Batch 282/581 (3 findings)...   batch 282: ✅ 3/3
+  Batch 283/581 (3 findings)...   batch 283: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 284/581 (3 findings)...   batch 284: ✅ 3/3
+  Batch 285/581 (3 findings)...   batch 285: ✅ 3/3
+  Batch 286/581 (3 findings)...   batch 286: ✅ 3/3
+  Batch 287/581 (3 findings)...   batch 287: ✅ 3/3
+  Batch 288/581 (3 findings)...   batch 288: ✅ 3/3
+  Batch 289/581 (3 findings)...   batch 289: ✅ 3/3
+  Batch 290/581 (3 findings)...   batch 290: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 291/581 (3 findings)...   batch 291: ✅ 3/3
+  Batch 292/581 (3 findings)...   batch 292: ✅ 3/3
+  Batch 293/581 (3 findings)...   batch 293: ✅ 3/3
+  Batch 294/581 (3 findings)...   batch 294: ✅ 3/3
+  Batch 295/581 (3 findings)...   batch 295: ✅ 3/3
+  Batch 296/581 (3 findings)...   batch 296: ✅ 3/3
+  Batch 297/581 (3 findings)...   batch 297: ✅ 3/3
+  Batch 298/581 (3 findings)...   batch 298: ✅ 3/3
+  Batch 299/581 (3 findings)...   batch 299: ✅ 3/3
+  Batch 300/581 (3 findings)...   batch 300: ✅ 3/3
+  Batch 301/581 (3 findings)...   batch 301: ✅ 3/3
+  Batch 302/581 (3 findings)...   batch 302: ✅ 3/3
+  Batch 303/581 (3 findings)...   batch 303: ✅ 3/3
+  Batch 304/581 (3 findings)...   batch 304: ✅ 3/3
+  Batch 305/581 (3 findings)...   batch 305: ✅ 3/3
+  Batch 306/581 (3 findings)...   batch 306: ✅ 3/3
+  Batch 307/581 (3 findings)...   batch 307: ✅ 3/3
+  Batch 308/581 (3 findings)...   batch 308: ✅ 3/3
+  Batch 309/581 (3 findings)...   batch 309: ✅ 3/3
+  Batch 310/581 (3 findings)...   batch 310: ✅ 3/3
+  Batch 311/581 (3 findings)...   batch 311: ✅ 3/3
+  Batch 312/581 (3 findings)...   batch 312: ✅ 3/3
+  Batch 313/581 (3 findings)...   batch 313: ✅ 3/3
+  Batch 314/581 (3 findings)...   batch 314: ✅ 3/3
+  Batch 315/581 (3 findings)...   batch 315: ✅ 3/3
+  Batch 316/581 (3 findings)...   batch 316: ✅ 3/3
+  Batch 317/581 (3 findings)...   batch 317: ✅ 3/3
+  Batch 318/581 (3 findings)...   batch 318: ✅ 3/3
+  Batch 319/581 (3 findings)...   batch 319: ✅ 3/3
+  Batch 320/581 (3 findings)...   batch 320: ✅ 3/3
+  Batch 321/581 (3 findings)...   batch 321: ✅ 3/3
+  Batch 322/581 (3 findings)...   batch 322: ✅ 3/3
+  Batch 323/581 (3 findings)...   batch 323: ✅ 3/3
+  Batch 324/581 (3 findings)...   batch 324: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 325/581 (3 findings)...   batch 325: ✅ 3/3
+  Batch 326/581 (3 findings)...   batch 326: ✅ 3/3
+  Batch 327/581 (3 findings)...   batch 327: ✅ 3/3
+  Batch 328/581 (3 findings)...   batch 328: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 329/581 (3 findings)...   batch 329: ✅ 3/3
+  Batch 330/581 (3 findings)...   batch 330: ✅ 3/3
+  Batch 331/581 (3 findings)...   batch 331: ✅ 3/3
+  Batch 332/581 (3 findings)...   batch 332: ✅ 3/3
+  Batch 333/581 (3 findings)...   batch 333: ✅ 3/3
+  Batch 334/581 (3 findings)...   batch 334: ✅ 3/3
+  Batch 335/581 (3 findings)...   batch 335: ✅ 3/3
+  Batch 336/581 (3 findings)...   batch 336: ✅ 3/3
+  Batch 337/581 (3 findings)...   batch 337: ✅ 3/3
+  Batch 338/581 (3 findings)...   batch 338: ✅ 3/3
+  Batch 339/581 (3 findings)...   batch 339: ✅ 3/3
+  Batch 340/581 (3 findings)...   batch 340: ✅ 3/3
+  Batch 341/581 (3 findings)...   batch 341: ✅ 3/3
+  Batch 342/581 (3 findings)...   batch 342: ✅ 3/3
+  Batch 343/581 (3 findings)...   batch 343: ✅ 3/3
+  Batch 344/581 (3 findings)...   batch 344: ✅ 3/3
+  Batch 345/581 (3 findings)...   batch 345: ✅ 3/3
+  Batch 346/581 (3 findings)...   batch 346: ✅ 3/3
+  Batch 347/581 (3 findings)...   batch 347: ✅ 3/3
+  Batch 348/581 (3 findings)...   batch 348: ✅ 3/3
+  Batch 349/581 (3 findings)...   batch 349: ✅ 3/3
+  Batch 350/581 (3 findings)...   batch 350: ✅ 3/3
+  Batch 351/581 (3 findings)...   batch 351: ✅ 3/3
+  Batch 352/581 (3 findings)...   batch 352: ✅ 3/3
+  Batch 353/581 (3 findings)...   batch 353: ✅ 3/3
+  Batch 354/581 (3 findings)...   batch 354: ✅ 3/3
+  Batch 355/581 (3 findings)...   batch 355: ✅ 3/3
+  Batch 356/581 (3 findings)...   batch 356: ✅ 3/3
+  Batch 357/581 (3 findings)...   batch 357: ✅ 3/3
+  Batch 358/581 (3 findings)...   batch 358: ✅ 3/3
+  Batch 359/581 (3 findings)...   batch 359: ✅ 3/3
+  Batch 360/581 (3 findings)...   batch 360: ✅ 3/3
+  Batch 361/581 (3 findings)...   batch 361: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 362/581 (3 findings)...   batch 362: ✅ 3/3
+  Batch 363/581 (3 findings)...   batch 363: ✅ 3/3
+  Batch 364/581 (3 findings)...   batch 364: ✅ 3/3
+  Batch 365/581 (3 findings)...   batch 365: ✅ 3/3
+  Batch 366/581 (3 findings)...   batch 366: ✅ 3/3
+  Batch 367/581 (3 findings)...   batch 367: ✅ 3/3
+  Batch 368/581 (3 findings)...   batch 368: ✅ 3/3
+  Batch 369/581 (3 findings)...   batch 369: ✅ 3/3
+  Batch 370/581 (3 findings)...   batch 370: ✅ 3/3
+  Batch 371/581 (3 findings)...   batch 371: ✅ 3/3
+  Batch 372/581 (3 findings)...   batch 372: ✅ 3/3
+  Batch 373/581 (3 findings)...   batch 373: ✅ 3/3
+  Batch 374/581 (3 findings)...   batch 374: ✅ 3/3
+  Batch 375/581 (3 findings)...   batch 375: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 376/581 (3 findings)...   batch 376: ✅ 3/3
+  Batch 377/581 (3 findings)...   batch 377: ✅ 3/3
+  Batch 378/581 (3 findings)...   batch 378: ✅ 3/3
+  Batch 379/581 (3 findings)...   batch 379: ✅ 3/3
+  Batch 380/581 (3 findings)...   batch 380: ✅ 3/3
+  Batch 381/581 (3 findings)...   batch 381: ✅ 3/3
+  Batch 382/581 (3 findings)...   batch 382: ✅ 3/3
+  Batch 383/581 (3 findings)...   batch 383: ✅ 3/3
+  Batch 384/581 (3 findings)...   batch 384: ✅ 3/3
+  Batch 385/581 (3 findings)...   batch 385: ✅ 3/3
+  Batch 386/581 (3 findings)...   batch 386: ✅ 3/3
+  Batch 387/581 (3 findings)...   batch 387: ✅ 3/3
+  Batch 388/581 (3 findings)...   batch 388: ✅ 3/3
+  Batch 389/581 (3 findings)...   batch 389: ✅ 3/3
+  Batch 390/581 (3 findings)...   batch 390: ✅ 3/3
+  Batch 391/581 (3 findings)...   batch 391: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 392/581 (3 findings)...   batch 392: ✅ 3/3
+  Batch 393/581 (3 findings)...   batch 393: ✅ 3/3
+  Batch 394/581 (3 findings)...   batch 394: ✅ 3/3
+  Batch 395/581 (3 findings)...   batch 395: ✅ 3/3
+  Batch 396/581 (3 findings)...   batch 396: ✅ 3/3
+  Batch 397/581 (3 findings)...   batch 397: ✅ 3/3
+  Batch 398/581 (3 findings)...   batch 398: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 399/581 (3 findings)...   batch 399: ✅ 3/3
+  Batch 400/581 (3 findings)...   batch 400: ✅ 3/3
+  Batch 401/581 (3 findings)...   batch 401: ✅ 3/3
+  Batch 402/581 (3 findings)...   batch 402: ✅ 3/3
+  Batch 403/581 (3 findings)...   batch 403: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 404/581 (3 findings)...   batch 404: ✅ 3/3
+  Batch 405/581 (3 findings)...   batch 405: ✅ 3/3
+  Batch 406/581 (3 findings)...   batch 406: ✅ 3/3
+  Batch 407/581 (3 findings)...   batch 407: ✅ 3/3
+  Batch 408/581 (3 findings)...   batch 408: ✅ 3/3
+  Batch 409/581 (3 findings)...   batch 409: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 410/581 (3 findings)...   batch 410: ✅ 3/3
+  Batch 411/581 (3 findings)...   batch 411: ✅ 3/3
+  Batch 412/581 (3 findings)...   batch 412: ✅ 3/3
+  Batch 413/581 (3 findings)...   batch 413: ✅ 3/3
+  Batch 414/581 (3 findings)...   batch 414: ✅ 3/3
+  Batch 415/581 (3 findings)...   batch 415: ✅ 3/3
+  Batch 416/581 (3 findings)...   batch 416: ✅ 3/3
+  Batch 417/581 (3 findings)...   batch 417: ✅ 3/3
+  Batch 418/581 (3 findings)...   batch 418: ✅ 3/3
+  Batch 419/581 (3 findings)...   batch 419: ✅ 3/3
+  Batch 420/581 (3 findings)...   batch 420: ✅ 3/3
+  Batch 421/581 (3 findings)...   batch 421: ✅ 3/3
+  Batch 422/581 (3 findings)...   batch 422: ✅ 3/3
+  Batch 423/581 (3 findings)...   batch 423: ✅ 3/3
+  Batch 424/581 (3 findings)...   batch 424: ✅ 3/3
+  Batch 425/581 (3 findings)...   batch 425: ✅ 3/3
+  Batch 426/581 (3 findings)...   batch 426: ✅ 3/3
+  Batch 427/581 (3 findings)...   batch 427: ✅ 3/3
+  Batch 428/581 (3 findings)...   batch 428: ✅ 3/3
+  Batch 429/581 (3 findings)...   batch 429: ✅ 3/3
+  Batch 430/581 (3 findings)...   batch 430: ✅ 3/3
+  Batch 431/581 (3 findings)...   batch 431: ✅ 3/3
+  Batch 432/581 (3 findings)...   batch 432: ✅ 3/3
+  Batch 433/581 (3 findings)...   batch 433: ✅ 3/3
+  Batch 434/581 (3 findings)...   batch 434: ✅ 3/3
+  Batch 435/581 (3 findings)...   batch 435: ✅ 3/3
+  Batch 436/581 (3 findings)...   batch 436: ✅ 3/3
+  Batch 437/581 (3 findings)...   batch 437: ✅ 3/3
+  Batch 438/581 (3 findings)...   batch 438: ✅ 3/3
+  Batch 439/581 (3 findings)...   batch 439: ✅ 3/3
+  Batch 440/581 (3 findings)...   batch 440: ✅ 3/3
+  Batch 441/581 (3 findings)...   batch 441: ✅ 3/3
+  Batch 442/581 (3 findings)...   batch 442: ✅ 3/3
+  Batch 443/581 (3 findings)...   batch 443: ✅ 3/3
+  Batch 444/581 (3 findings)...   batch 444: ✅ 3/3
+  Batch 445/581 (3 findings)...   batch 445: ✅ 3/3
+  Batch 446/581 (3 findings)...   batch 446: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 447/581 (3 findings)...   batch 447: ✅ 3/3
+  Batch 448/581 (3 findings)...   batch 448: ✅ 3/3
+  Batch 449/581 (3 findings)...   batch 449: ✅ 3/3
+  Batch 450/581 (3 findings)...   batch 450: ✅ 3/3
+  Batch 451/581 (3 findings)...   batch 451: ✅ 3/3
+  Batch 452/581 (3 findings)...   batch 452: ✅ 3/3
+  Batch 453/581 (3 findings)...   batch 453: ✅ 3/3
+  Batch 454/581 (3 findings)...   batch 454: ✅ 3/3
+  Batch 455/581 (3 findings)...   batch 455: ✅ 3/3
+  Batch 456/581 (3 findings)...   batch 456: ✅ 3/3
+  Batch 457/581 (3 findings)...   batch 457: ✅ 3/3
+  Batch 458/581 (3 findings)...   batch 458: ✅ 3/3
+  Batch 459/581 (3 findings)...   batch 459: ✅ 3/3
+  Batch 460/581 (3 findings)...   batch 460: ✅ 3/3
+  Batch 461/581 (3 findings)...   batch 461: ✅ 3/3
+  Batch 462/581 (3 findings)...   batch 462: ✅ 3/3
+  Batch 463/581 (3 findings)...   batch 463: ✅ 3/3
+  Batch 464/581 (3 findings)...   batch 464: ✅ 3/3
+  Batch 465/581 (3 findings)...   batch 465: ✅ 3/3
+  Batch 466/581 (3 findings)...   batch 466: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 467/581 (3 findings)...   batch 467: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 468/581 (3 findings)...   batch 468: ✅ 3/3
+  Batch 469/581 (3 findings)...   batch 469: ✅ 3/3
+  Batch 470/581 (3 findings)...   batch 470: ✅ 3/3
+  Batch 471/581 (3 findings)...   batch 471: ✅ 3/3
+  Batch 472/581 (3 findings)...   batch 472: ✅ 3/3
+  Batch 473/581 (3 findings)...   batch 473: ✅ 3/3
+  Batch 474/581 (3 findings)...   batch 474: ✅ 3/3
+  Batch 475/581 (3 findings)...   batch 475: ✅ 3/3
+  Batch 476/581 (3 findings)...   batch 476: ✅ 3/3
+  Batch 477/581 (3 findings)...   batch 477: ✅ 3/3
+  Batch 478/581 (3 findings)...   batch 478: ✅ 3/3
+  Batch 479/581 (3 findings)...   batch 479: ✅ 3/3
+  Batch 480/581 (3 findings)...   batch 480: ✅ 3/3
+  Batch 481/581 (3 findings)...   batch 481: ✅ 3/3
+  Batch 482/581 (3 findings)...   batch 482: ✅ 3/3
+  Batch 483/581 (3 findings)...   batch 483: ✅ 3/3
+  Batch 484/581 (3 findings)...   batch 484: ✅ 3/3
+  Batch 485/581 (3 findings)...   batch 485: ✅ 3/3
+  Batch 486/581 (3 findings)...   batch 486: ✅ 3/3
+  Batch 487/581 (3 findings)...   batch 487: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 488/581 (3 findings)...   batch 488: ✅ 3/3
+  Batch 489/581 (3 findings)...   batch 489: ✅ 3/3
+  Batch 490/581 (3 findings)...   batch 490: ❌ No JSON structure found in response
+  Batch 491/581 (3 findings)...   batch 491: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 492/581 (3 findings)...   batch 492: ✅ 3/3
+  Batch 493/581 (3 findings)...   batch 493: ✅ 3/3
+  Batch 494/581 (3 findings)...   batch 494: ✅ 3/3
+  Batch 495/581 (3 findings)...   batch 495: ✅ 3/3
+  Batch 496/581 (3 findings)...   batch 496: ✅ 3/3
+  Batch 497/581 (3 findings)...   batch 497: ✅ 3/3
+  Batch 498/581 (3 findings)...   batch 498: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 499/581 (3 findings)...   batch 499: ✅ 3/3
+  Batch 500/581 (3 findings)...   batch 500: ✅ 3/3
+  Batch 501/581 (3 findings)...   batch 501: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 502/581 (3 findings)...   batch 502: ✅ 3/3
+  Batch 503/581 (3 findings)...   batch 503: ✅ 3/3
+  Batch 504/581 (3 findings)...   batch 504: ✅ 3/3
+  Batch 505/581 (3 findings)...   batch 505: ✅ 3/3
+  Batch 506/581 (3 findings)...   batch 506: ✅ 3/3
+  Batch 507/581 (3 findings)...   batch 507: ✅ 3/3
+  Batch 508/581 (3 findings)...   batch 508: ✅ 3/3
+  Batch 509/581 (3 findings)...   batch 509: ✅ 3/3
+  Batch 510/581 (3 findings)...   batch 510: ✅ 3/3
+  Batch 511/581 (3 findings)...   batch 511: ✅ 3/3
+  Batch 512/581 (3 findings)...   batch 512: ✅ 3/3
+  Batch 513/581 (3 findings)...   batch 513: ✅ 3/3
+  Batch 514/581 (3 findings)...   batch 514: ✅ 3/3
+  Batch 515/581 (3 findings)...   batch 515: ✅ 3/3
+  Batch 516/581 (3 findings)...   batch 516: ✅ 3/3
+  Batch 517/581 (3 findings)...   batch 517: ✅ 3/3
+  Batch 518/581 (3 findings)...   batch 518: ✅ 3/3
+  Batch 519/581 (3 findings)...   batch 519: ✅ 3/3
+  Batch 520/581 (3 findings)...   batch 520: ✅ 3/3
+  Batch 521/581 (3 findings)...   batch 521: ✅ 3/3
+  Batch 522/581 (3 findings)...   batch 522: ✅ 3/3
+  Batch 523/581 (3 findings)...   batch 523: ✅ 3/3
+  Batch 524/581 (3 findings)...   batch 524: ✅ 3/3
+  Batch 525/581 (3 findings)...   batch 525: ✅ 3/3
+  Batch 526/581 (3 findings)...   batch 526: ✅ 3/3
+  Batch 527/581 (3 findings)...   batch 527: ✅ 3/3
+  Batch 528/581 (3 findings)...   batch 528: ✅ 3/3
+  Batch 529/581 (3 findings)...   batch 529: ✅ 3/3
+  Batch 530/581 (3 findings)...   batch 530: ✅ 3/3
+  Batch 531/581 (3 findings)...   batch 531: ✅ 3/3
+  Batch 532/581 (3 findings)...   batch 532: ✅ 3/3
+  Batch 533/581 (3 findings)...   batch 533: ✅ 3/3
+  Batch 534/581 (3 findings)...   batch 534: ⚠️ 2/3 (1 unusable) — 1 to retry
+  Batch 535/581 (3 findings)...   batch 535: ✅ 3/3
+  Batch 536/581 (3 findings)...   batch 536: ✅ 3/3
+  Batch 537/581 (3 findings)...   batch 537: ✅ 3/3
+  Batch 538/581 (3 findings)...   batch 538: ✅ 3/3
+  Batch 539/581 (3 findings)...   batch 539: ✅ 3/3
+  Batch 540/581 (3 findings)...   batch 540: ✅ 3/3
+  Batch 541/581 (3 findings)...   batch 541: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 542/581 (3 findings)...   batch 542: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 543/581 (3 findings)...   batch 543: ✅ 3/3
+  Batch 544/581 (3 findings)...   batch 544: ✅ 3/3
+  Batch 545/581 (3 findings)...   batch 545: ✅ 3/3
+  Batch 546/581 (3 findings)...   batch 546: ✅ 3/3
+  Batch 547/581 (3 findings)...   batch 547: ✅ 3/3
+  Batch 548/581 (3 findings)...   batch 548: ✅ 3/3
+  Batch 549/581 (3 findings)...   batch 549: ✅ 3/3
+  Batch 550/581 (3 findings)...   batch 550: ✅ 3/3
+  Batch 551/581 (3 findings)...   batch 551: ✅ 3/3
+  Batch 552/581 (3 findings)...   batch 552: ✅ 3/3
+  Batch 553/581 (3 findings)...   batch 553: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 554/581 (3 findings)...   batch 554: ✅ 3/3
+  Batch 555/581 (3 findings)...   batch 555: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 556/581 (3 findings)...   batch 556: ✅ 3/3
+  Batch 557/581 (3 findings)...   batch 557: ✅ 3/3
+  Batch 558/581 (3 findings)...   batch 558: ✅ 3/3
+  Batch 559/581 (3 findings)...   batch 559: ✅ 3/3
+  Batch 560/581 (3 findings)...   batch 560: ✅ 3/3
+  Batch 561/581 (3 findings)...   batch 561: ✅ 3/3
+  Batch 562/581 (3 findings)...   batch 562: ✅ 3/3
+  Batch 563/581 (3 findings)...   batch 563: ✅ 3/3
+  Batch 564/581 (3 findings)...   batch 564: ✅ 3/3
+  Batch 565/581 (3 findings)...   batch 565: ✅ 3/3
+  Batch 566/581 (3 findings)...   batch 566: ✅ 3/3
+  Batch 567/581 (3 findings)...   batch 567: ✅ 3/3
+  Batch 568/581 (3 findings)...   batch 568: ✅ 3/3
+  Batch 569/581 (3 findings)...   batch 569: ✅ 3/3
+  Batch 570/581 (3 findings)...   batch 570: ✅ 3/3
+  Batch 571/581 (3 findings)...   batch 571: ✅ 3/3
+  Batch 572/581 (3 findings)...   batch 572: ✅ 3/3
+  Batch 573/581 (3 findings)...   batch 573: ✅ 3/3
+  Batch 574/581 (3 findings)...   batch 574: ✅ 3/3
+  Batch 575/581 (3 findings)...   batch 575: ✅ 3/3
+  Batch 576/581 (3 findings)...   batch 576: ✅ 3/3
+  Batch 577/581 (3 findings)...   batch 577: ✅ 3/3
+  Batch 578/581 (3 findings)...   batch 578: ✅ 3/3
+  Batch 579/581 (3 findings)...   batch 579: ✅ 3/3
+  Batch 580/581 (3 findings)...   batch 580: ✅ 3/3
+  Batch 581/581 (2 findings)... /home/Deus/Projects/sast_vuln_detect/.venv/lib64/python3.14/site-packages/langchain_core/_api/deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+[Step 1] Loading SAST results...
+  2410 findings (config fingerprint 1e89e29a6aa84d0e)
+  Resuming: 2326 findings already analysed
+[Step 2] Static triage...
+  escalate=2410 defer=0  (3.11s)
+[Step 3] Robust model: ollama/qwen3.5:9b — 84 findings pending
+  auto-confirmed 668 findings in ['cookie', 'cryptographic', 'hashing'] (no LLM call)
+  built cross-file index: 2769 classes (0.5s)
+  2410 escalated (668 auto-confirmed), 1658 already analysed, 84 to the model in batches of 3
+  Batch 1/28 (3 findings)...   batch 1: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 2/28 (3 findings)...   batch 2: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 3/28 (3 findings)...   batch 3: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 4/28 (3 findings)...   batch 4: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 5/28 (3 findings)...   batch 5: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 6/28 (3 findings)...   batch 6: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 7/28 (3 findings)...   batch 7: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 8/28 (3 findings)...   batch 8: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 9/28 (3 findings)...   batch 9: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 10/28 (3 findings)...   batch 10: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 11/28 (3 findings)...   batch 11: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 12/28 (3 findings)...   batch 12: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 13/28 (3 findings)...   batch 13: ✅ 3/3
+  Batch 14/28 (3 findings)...   batch 14: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 15/28 (3 findings)...   batch 15: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 16/28 (3 findings)...   batch 16: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 17/28 (3 findings)...   batch 17: ✅ 3/3
+  Batch 18/28 (3 findings)...   batch 18: ✅ 3/3
+  Batch 19/28 (3 findings)...   batch 19: ✅ 3/3
+  Batch 20/28 (3 findings)...   batch 20: ✅ 3/3
+  Batch 21/28 (3 findings)...   batch 21: ✅ 3/3
+  Batch 22/28 (3 findings)...   batch 22: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 23/28 (3 findings)...   batch 23: ✅ 3/3
+  Batch 24/28 (3 findings)...   batch 24: ✅ 3/3
+  Batch 25/28 (3 findings)...   batch 25: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 26/28 (3 findings)...   batch 26: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 27/28 (3 findings)...   batch 27: ⚠️ 0/3 (count mismatch) — 3 to retry
+  Batch 28/28 (3 findings)...   batch 28: ⚠️ 0/3 (count mismatch) — 3 to retry
+
+[Step 3b] Retrying 60 findings (sub-batch size 3)...
+  retry 1 (3): ⚠️ 0/3
+  retry 2 (3): ⚠️ 0/3
+  retry 3 (3): ⚠️ 0/3
+  retry 4 (3): ⚠️ 0/3
+  retry 5 (3): ⚠️ 0/3
+  retry 6 (3): ⚠️ 0/3
+  retry 7 (3): ⚠️ 0/3
+  retry 8 (3): ⚠️ 0/3
+  retry 9 (3): ⚠️ 0/3
+  retry 10 (3): ⚠️ 0/3
+  retry 11 (3): ⚠️ 0/3
+  retry 12 (3): ⚠️ 0/3
+  retry 13 (3): ⚠️ 0/3
+  retry 14 (3): ⚠️ 0/3
+  retry 15 (3): ⚠️ 0/3
+  retry 16 (3): ⚠️ 0/3
+  retry 17 (3): ⚠️ 0/3
+  retry 18 (3): ⚠️ 0/3
+  retry 19 (3): ⚠️ 0/3
+  retry 20 (3): ⚠️ 0/3
+
+[Step 3b] Retrying 60 findings (sub-batch size 1)...
+  retry 1 (1): ✅ 1/1
+  retry 2 (1): ✅ 1/1
+  retry 3 (1): ✅ 1/1
+  retry 4 (1): ✅ 1/1
+  retry 5 (1): ✅ 1/1
+  retry 6 (1): ✅ 1/1
+  retry 7 (1): ✅ 1/1
+  retry 8 (1): ✅ 1/1
+  retry 9 (1): ✅ 1/1
+  retry 10 (1): ✅ 1/1
+  retry 11 (1): ✅ 1/1
+  retry 12 (1): ✅ 1/1
+  retry 13 (1): ✅ 1/1
+  retry 14 (1): ✅ 1/1
+  retry 15 (1): ✅ 1/1
+  retry 16 (1): ✅ 1/1
+  retry 17 (1): ✅ 1/1
+  retry 18 (1): ✅ 1/1
+  retry 19 (1): ⚠️ 0/1
+  retry 20 (1): ⚠️ 0/1
+  retry 21 (1): ✅ 1/1
+  retry 22 (1): ✅ 1/1
+  retry 23 (1): ✅ 1/1
+  retry 24 (1): ✅ 1/1
+  retry 25 (1): ✅ 1/1
+  retry 26 (1): ✅ 1/1
+  retry 27 (1): ✅ 1/1
+  retry 28 (1): ✅ 1/1
+  retry 29 (1): ✅ 1/1
+  retry 30 (1): ✅ 1/1
+  retry 31 (1): ✅ 1/1
+  retry 32 (1): ✅ 1/1
+  retry 33 (1): ✅ 1/1
+  retry 34 (1): ✅ 1/1
+  retry 35 (1): ✅ 1/1
+  retry 36 (1): ✅ 1/1
+  retry 37 (1): ✅ 1/1
+  retry 38 (1): ✅ 1/1
+  retry 39 (1): ✅ 1/1
+  retry 40 (1): ✅ 1/1
+  retry 41 (1): ✅ 1/1
+  retry 42 (1): ✅ 1/1
+  retry 43 (1): ✅ 1/1
+  retry 44 (1): ✅ 1/1
+  retry 45 (1): ✅ 1/1
+  retry 46 (1): ✅ 1/1
+  retry 47 (1): ⚠️ 0/1
+  retry 48 (1): ✅ 1/1
+  retry 49 (1): ✅ 1/1
+  retry 50 (1): ✅ 1/1
+  retry 51 (1): ✅ 1/1
+  retry 52 (1): ✅ 1/1
+  retry 53 (1): ✅ 1/1
+  retry 54 (1): ✅ 1/1
+  retry 55 (1): ✅ 1/1
+  retry 56 (1): ✅ 1/1
+  retry 57 (1): ✅ 1/1
+  retry 58 (1): ⚠️ 0/1
+  retry 59 (1): ✅ 1/1
+  retry 60 (1): ✅ 1/1
+
+✅ Done: 2410 findings written to 'results/local_qwen35.json' (2406 with robust analysis, 0 deferred, 4 escalated but unanalysed)

@@ -29,9 +29,17 @@ def add_config_args(parser: argparse.ArgumentParser):
     g.add_argument("--progress", type=Path, default=defaults.progress_file, dest="progress_file")
     g.add_argument("--triage-report", type=Path, default=defaults.triage_report_file, dest="triage_report_file")
     g.add_argument("--labels", type=Path, default=defaults.labels_file, dest="labels_file")
-    g.add_argument("--backend", choices=("ollama", "anthropic"), default=defaults.backend,
-                   help="robust-stage backend (default: ollama / local)")
+    g.add_argument("--backend", choices=("ollama", "anthropic", "muse-spark", "deepseek"),
+                   default=defaults.backend, help="robust-stage backend (default: ollama / local)")
     g.add_argument("--robust-model", default=defaults.robust_model, help="Ollama model tag")
+    g.add_argument("--muse-spark-model", default=defaults.muse_spark_model)
+    g.add_argument("--muse-spark-max-tokens", type=int, default=defaults.muse_spark_max_tokens,
+                   help="output budget per call - Muse Spark's reasoning tokens share this, so keep it generous")
+    g.add_argument("--muse-spark-reasoning-effort", default=None,
+                   help="pass-through reasoning_effort value (unconfirmed param name for this API)")
+    g.add_argument("--deepseek-model", default=defaults.deepseek_model)
+    g.add_argument("--deepseek-max-tokens", type=int, default=defaults.deepseek_max_tokens,
+                   help="output budget per call - reasoning tokens (if any) share this, so keep it generous")
     g.add_argument("--anthropic-model", default=defaults.anthropic_model)
     g.add_argument("--anthropic-max-tokens", type=int, default=defaults.anthropic_max_tokens)
     g.add_argument("--anthropic-workspace-id", default=None,
@@ -56,6 +64,10 @@ def add_config_args(parser: argparse.ArgumentParser):
     g.add_argument("--batch-size", type=int, default=None,
                    help="findings per model call (default: 20 for ollama, 5 for anthropic)")
     g.add_argument("--num-ctx", type=int, default=defaults.num_ctx)
+    g.add_argument("--ollama-think", action="store_true",
+                   help="enable a local model's reasoning/thinking mode (much slower per finding)")
+    g.add_argument("--ollama-num-predict", type=int, default=None,
+                   help="hard cap on local-model output tokens per call (default: ~900 x batch-size, min 1024, max 8192)")
     g.add_argument("--timeout", type=int, default=defaults.timeout)
     g.add_argument("--max-retries", type=int, default=defaults.max_retries)
     g.add_argument("--max-findings", type=int, default=None,
@@ -95,6 +107,13 @@ def build_config(args) -> PipelineConfig:
         labels_file=args.labels_file,
         backend=args.backend,
         robust_model=args.robust_model,
+        muse_spark_api_key=os.environ.get("MUSE_SPARK_API_KEY"),
+        muse_spark_model=args.muse_spark_model,
+        muse_spark_max_tokens=args.muse_spark_max_tokens,
+        muse_spark_reasoning_effort=args.muse_spark_reasoning_effort,
+        deepseek_api_key=os.environ.get("DEEPSEEK_API_KEY") or None,
+        deepseek_model=args.deepseek_model,
+        deepseek_max_tokens=args.deepseek_max_tokens,
         anthropic_model=args.anthropic_model,
         anthropic_max_tokens=args.anthropic_max_tokens,
         anthropic_workspace_id=args.anthropic_workspace_id or os.environ.get("ANTHROPIC_WORKSPACE_ID"),
@@ -111,6 +130,8 @@ def build_config(args) -> PipelineConfig:
         batch_size=(args.batch_size if args.batch_size is not None
                     else (5 if args.backend == "anthropic" else 20)),
         num_ctx=args.num_ctx,
+        ollama_think=args.ollama_think,
+        ollama_num_predict=args.ollama_num_predict,
         timeout=args.timeout,
         max_retries=args.max_retries,
         max_findings=args.max_findings,
@@ -179,6 +200,12 @@ def cmd_analyze(args):
         if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
             print("✗ the anthropic backend needs ANTHROPIC_API_KEY (or ANTHROPIC_AUTH_TOKEN) in the environment.")
             return 2
+    if config.backend == "muse-spark" and not config.muse_spark_api_key:
+        print("✗ --backend muse-spark needs MUSE_SPARK_API_KEY in the environment.")
+        return 2
+    if config.backend == "deepseek" and not config.deepseek_api_key:
+        print("✗ --backend deepseek needs DEEPSEEK_API_KEY in the environment.")
+        return 2
     answer_question(config)
     return 0
 

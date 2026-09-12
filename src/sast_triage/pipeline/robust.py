@@ -272,7 +272,7 @@ def analyze_escalated(llm, results, run: TriageRun, config: PipelineConfig,
     else:
         stats_auto = 0
 
-    if config.cross_file_context and config.backend != "ollama":
+    if config.cross_file_context:
         from ..context import ProjectIndex
         t0 = time.time()
         reader.project_index = ProjectIndex.build(config.source_root)

@@ -9,7 +9,6 @@ cross-file context + static evidence).
 from __future__ import annotations
 
 import json
-import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -23,28 +22,26 @@ from .triage import SourceReader
 
 # ==================================================================
 # Cross-file resolution
+#
+# Uses a real Java grammar (tree-sitter) rather than pattern matching: method/class
+# boundaries, generics, multi-line signatures and comments all fall out of the parse
+# for free, and — the thing regex genuinely could not do — an unqualified call inside a
+# method (``helper(x)``, no receiver) resolves against the method's own enclosing class,
+# not just receiver-qualified calls (``x.helper()``).
 # ==================================================================
 
 
-# Start of a Java method: modifiers, return type, name, "(".  The parameter list and
-# the opening brace may be on later lines, so this matches only up to "(" and the caller
-# scans ahead for the "{".
-_METHOD_START = re.compile(
-    r"^[ \t]+(?:@\w+(?:\([^)]*\))?\s+)*"
-    r"(?:(?:public|private|protected|static|final|synchronized|abstract|native|default)\s+)+"
-    r"(?:<[^>]+>\s+)?"
-    r"(?P<ret>[A-Za-z_][\w.<>\[\], ?]*)\s+"
-    r"(?P<name>[A-Za-z_]\w*)\s*\("
-)
-_CLASS_DECL = re.compile(r"\b(?:class|interface|enum)\s+([A-Z]\w*)\b(?P<rest>[^{]*)")
-_IMPLEMENTS = re.compile(r"\b(?:implements|extends)\s+([A-Za-z_][\w., <>]*)")
-_CTOR_HINT = re.compile(r"\bnew\s+([A-Z]\w*)\s*\(")
-# `Type var` / `Type var =` / `Type var;`  (Type may be dotted / generic)
-_VAR_DECL = re.compile(r"\b([A-Za-z_][\w.]*(?:<[^>;]*>)?)\s+([a-z_]\w*)\s*[=;)]")
-# `Recv.method(`  — Recv is a var name or a ClassName
-_CALL = re.compile(r"\b([A-Za-z_]\w*)\.([a-z_]\w*)\s*\(")
-_LINE_COMMENT = re.compile(r"//[^\n]*")
-_BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
+def _require_java_parser():
+    try:
+        import tree_sitter_java as _tsjava
+        from tree_sitter import Language, Parser
+    except ImportError as exc:  # pragma: no cover - environment dependent
+        raise RuntimeError(
+            "Cross-file context resolution needs a Java parser. Install it with:\n"
+            "  python -m pip install tree-sitter tree-sitter-java"
+        ) from exc
+    return Parser(Language(_tsjava.language()))
+
 
 _JAVA_BUILTINS = {
     "String", "Integer", "Long", "Boolean", "Object", "Math", "System", "Arrays",
@@ -52,21 +49,153 @@ _JAVA_BUILTINS = {
     "Exception", "Thread", "Class", "Character", "Double", "Float", "Byte",
 }
 
+_TYPE_DECL_NODES = ("class_declaration", "interface_declaration", "enum_declaration",
+                    "record_declaration")
+_METHOD_NODES = ("method_declaration", "constructor_declaration")
+_BINDING_NODES = ("local_variable_declaration", "field_declaration", "formal_parameter")
 
-def _strip_comments(text: str) -> str:
-    return _LINE_COMMENT.sub("", _BLOCK_COMMENT.sub("", text))
+
+def _wrap(text: str) -> bytes:
+    """A bare method/snippet isn't a valid compilation unit on its own; wrapping it in a
+    throwaway class lets the parser treat it as one without touching its own coordinates
+    (nothing here slices text back out by byte offset, so the wrapper needs no unwinding)."""
+    return ("class __CrossFileWrapper__ {\n" + text + "\n}").encode("utf-8", "replace")
 
 
-def _match_brace_end(lines: list, open_idx: int) -> int:
-    depth = 0
-    for i in range(open_idx, len(lines)):
-        s = _LINE_COMMENT.sub("", lines[i])
-        depth += s.count("{") - s.count("}")
-        if depth <= 0 and i > open_idx:
-            return i
-        if depth <= 0 and "{" in s and "}" in s:
-            return i
-    return min(open_idx + 60, len(lines) - 1)
+def _child_of_type(node, type_name):
+    for c in node.children:
+        if c.type == type_name:
+            return c
+    return None
+
+
+def _text(node) -> str:
+    return node.text.decode("utf-8", "replace")
+
+
+def _simple_type_name(type_node):
+    """Best-effort unqualified class name for a type node; None for primitives, wildcards
+    and other types that can never be a project class anyway."""
+    if type_node is None:
+        return None
+    t = type_node.type
+    if t in ("type_identifier", "identifier"):
+        return _text(type_node)
+    if t == "generic_type":
+        return _simple_type_name(type_node.children[0]) if type_node.child_count else None
+    if t == "scoped_type_identifier":
+        last = type_node.children[-1] if type_node.child_count else None
+        return _simple_type_name(last) if last is not None else None
+    if t == "array_type":
+        return _simple_type_name(type_node.child_by_field_name("element"))
+    return None  # primitive_type, void_type, wildcard, ...
+
+
+def _walk_type_declarations(node):
+    """Every class/interface/enum/record declaration in the tree, at any nesting depth."""
+    if node.type in _TYPE_DECL_NODES:
+        yield node
+    for c in node.children:
+        yield from _walk_type_declarations(c)
+
+
+def _iter_method_invocations(node):
+    if node.type == "method_invocation":
+        yield node
+    for c in node.children:
+        yield from _iter_method_invocations(c)
+
+
+def _type_name(type_decl_node):
+    name_node = type_decl_node.child_by_field_name("name")
+    return _text(name_node) if name_node is not None else None
+
+
+def _supertypes_of(type_decl_node) -> list:
+    names = []
+    superclass = type_decl_node.child_by_field_name("superclass")
+    if superclass is not None and superclass.child_count:
+        name = _simple_type_name(superclass.children[-1])
+        if name:
+            names.append(name)
+    interfaces = (type_decl_node.child_by_field_name("interfaces")
+                 or _child_of_type(type_decl_node, "extends_interfaces"))
+    if interfaces is not None:
+        type_list = _child_of_type(interfaces, "type_list")
+        if type_list is not None:
+            for c in type_list.children:
+                name = _simple_type_name(c)
+                if name:
+                    names.append(name)
+    return names
+
+
+def _direct_methods(type_decl_node):
+    body = type_decl_node.child_by_field_name("body")
+    if body is None:
+        return
+    for c in body.children:
+        if c.type in _METHOD_NODES:
+            yield c
+
+
+def _class_name_at_offset(tree_root, offset: int):
+    """The innermost class/interface/enum whose source range contains ``offset``."""
+    best = None
+    for type_node in _walk_type_declarations(tree_root):
+        if type_node.start_byte <= offset < type_node.end_byte:
+            best = type_node
+    return _type_name(best) if best is not None else None
+
+
+def _collect_type_bindings(node, out: dict) -> None:
+    """var/param/field name -> simple class name, from every declaration in the subtree.
+
+    Not scope-precise (a field and a same-named local both just land in the same dict,
+    last one wins) — matching what this needs it for: a best-effort guess at a receiver's
+    type, not a real symbol table.
+    """
+    if node.type in ("local_variable_declaration", "field_declaration"):
+        simple = _simple_type_name(node.child_by_field_name("type"))
+        if simple:
+            for c in node.children:
+                if c.type == "variable_declarator":
+                    name_node = c.child_by_field_name("name")
+                    if name_node is not None:
+                        out[_text(name_node)] = simple
+    elif node.type == "formal_parameter":
+        simple = _simple_type_name(node.child_by_field_name("type"))
+        name_node = node.child_by_field_name("name")
+        if simple and name_node is not None:
+            out[_text(name_node)] = simple
+    for c in node.children:
+        _collect_type_bindings(c, out)
+
+
+def _call_receiver_and_name(call_node):
+    """(kind, receiver_name_or_None, method_name) for one ``method_invocation`` node.
+
+    ``kind`` is ``"none"`` (bare call, no receiver), ``"this"``, ``"identifier"``, or
+    ``"chain"`` for anything else (a field access chain's leaf identifier is resolved;
+    a receiver that is itself a call, e.g. ``getConn().createStatement()``, is left
+    unresolved here — the inner call is still visited on its own since the walk covers
+    every ``method_invocation`` node, nested or not)."""
+    name_node = call_node.child_by_field_name("name")
+    if name_node is None:
+        return None
+    method_name = _text(name_node)
+    obj = call_node.child_by_field_name("object")
+    if obj is None:
+        return "none", None, method_name
+    if obj.type == "this":
+        return "this", None, method_name
+    if obj.type == "identifier":
+        return "identifier", _text(obj), method_name
+    if obj.type == "field_access":
+        field_node = obj.child_by_field_name("field")
+        if field_node is not None:
+            return "identifier", _text(field_node), method_name
+    return "chain", None, method_name
 
 
 @dataclass
@@ -96,42 +225,31 @@ class ProjectIndex:
             if n >= max_files:
                 break
             try:
-                lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
+                source_bytes = path.read_bytes()
             except OSError:
                 continue
-            current_class = None
-            for i, line in enumerate(lines):
-                cm = _CLASS_DECL.search(line)
-                if cm:
-                    current_class = cm.group(1)
-                    idx.class_files.setdefault(current_class, str(path))
-                    im = _IMPLEMENTS.search(cm.group("rest"))
-                    if im:
-                        for sup in re.split(r"[,\s]+", im.group(1).strip()):
-                            sup = sup.split("<")[0].strip()
-                            if sup and sup[0].isupper():
-                                idx.supertypes.setdefault(current_class, []).append(sup)
-                                idx.subtypes.setdefault(sup, []).append(current_class)
+            try:
+                tree = _require_java_parser().parse(source_bytes)
+            except Exception:
+                continue  # unparseable file: skip it, same as a regex that never matched
+            for type_node in _walk_type_declarations(tree.root_node):
+                class_name = _type_name(type_node)
+                if not class_name:
                     continue
-                if not current_class:
-                    continue
-                ms = _METHOD_START.match(line)
-                if not ms or ms.group("name") in ("if", "for", "while", "switch", "catch", "return", "new"):
-                    continue
-                # find the "{" that opens the body (this line or the next few)
-                open_idx = None
-                for j in range(i, min(i + 4, len(lines))):
-                    if ";" in _LINE_COMMENT.sub("", lines[j]).split("{")[0] and "{" not in lines[j]:
-                        break  # abstract/interface method declaration, no body
-                    if "{" in lines[j]:
-                        open_idx = j
-                        break
-                if open_idx is None:
-                    continue
-                end = _match_brace_end(lines, open_idx)
-                body = "\n".join(lines[i:end + 1])
-                md = MethodDef(current_class, ms.group("name"), lines[i].strip(), body)
-                idx.methods.setdefault(current_class, {}).setdefault(md.name, []).append(md)
+                idx.class_files.setdefault(class_name, str(path))
+                for sup in _supertypes_of(type_node):
+                    idx.supertypes.setdefault(class_name, []).append(sup)
+                    idx.subtypes.setdefault(sup, []).append(class_name)
+                for m in _direct_methods(type_node):
+                    if m.child_by_field_name("body") is None:
+                        continue  # abstract/interface method: no body to inline
+                    name_node = m.child_by_field_name("name")
+                    if name_node is None:
+                        continue
+                    body_text = source_bytes[m.start_byte:m.end_byte].decode("utf-8", "replace")
+                    sig_line = body_text.split("\n", 1)[0].strip()
+                    md = MethodDef(class_name, _text(name_node), sig_line, body_text)
+                    idx.methods.setdefault(class_name, {}).setdefault(md.name, []).append(md)
         return idx
 
     def lookup(self, class_name: str, method_name: str) -> list:
@@ -143,34 +261,63 @@ class ProjectIndex:
         return found
 
 
-def _resolve_types(scope_text: str) -> dict:
-    """var name -> simple class name, from declarations/params/`new` in the scope."""
-    types = {}
-    clean = _strip_comments(scope_text)
-    for typ, var in _VAR_DECL.findall(clean):
-        simple = typ.split(".")[-1].split("<")[0]
-        if simple and simple[0].isupper():
-            types[var] = simple
-    return types
+def _resolve_types(enclosing_file_text: str, focal_method: str) -> dict:
+    """var/param/field name -> simple class name, from the whole enclosing file plus the
+    focal method (parsed standalone, in case it isn't a verbatim substring of the file,
+    e.g. a hand-built snippet in a test)."""
+    out = {}
+    try:
+        tree = _require_java_parser().parse(enclosing_file_text.encode("utf-8", "replace"))
+        _collect_type_bindings(tree.root_node, out)
+    except Exception:
+        pass
+    try:
+        tree = _require_java_parser().parse(_wrap(focal_method))
+        _collect_type_bindings(tree.root_node, out)
+    except Exception:
+        pass
+    return out
 
 
 def expand_calls(focal_method: str, enclosing_file_text: str, index: ProjectIndex,
                  max_methods: int = 8, max_chars: int = 3200, depth: int = 2) -> list:
     """Return ``[(label, body), ...]`` for project methods the focal method calls.
 
-    ``enclosing_file_text`` is used to resolve receiver-variable types. Expansion recurses
-    ``depth`` levels (a helper that calls another helper) and stops at the caps.
+    ``enclosing_file_text`` is used to resolve receiver-variable types and the focal
+    method's own enclosing class (needed to resolve unqualified calls). Expansion
+    recurses ``depth`` levels (a helper that calls another helper) and stops at the caps.
     """
-    types = _resolve_types(enclosing_file_text + "\n" + focal_method)
+    types = _resolve_types(enclosing_file_text, focal_method)
+
+    focal_class = None
+    try:
+        file_tree = _require_java_parser().parse(enclosing_file_text.encode("utf-8", "replace"))
+        offset = enclosing_file_text.find(focal_method)
+        if offset >= 0:
+            focal_class = _class_name_at_offset(file_tree.root_node, offset)
+    except Exception:
+        pass
+
     out, seen, budget = [], set(), max_chars
-    frontier = [(_strip_comments(focal_method), depth)]
+    frontier = [(focal_method, focal_class, depth)]
 
     while frontier and len(out) < max_methods and budget > 0:
-        text, d = frontier.pop(0)
+        text, current_class, d = frontier.pop(0)
         if d <= 0:
             continue
-        for recv, method in _CALL.findall(text):
-            cls = recv if recv[0].isupper() else types.get(recv)
+        try:
+            tree = _require_java_parser().parse(_wrap(text))
+        except Exception:
+            continue
+        for call_node in _iter_method_invocations(tree.root_node):
+            info = _call_receiver_and_name(call_node)
+            if info is None:
+                continue
+            kind, recv, method = info
+            if kind == "chain":
+                continue
+            cls = current_class if kind in ("none", "this") else (
+                recv if recv[:1].isupper() else types.get(recv))
             if not cls or cls in _JAVA_BUILTINS:
                 continue
             for md in index.lookup(cls, method):
@@ -182,7 +329,7 @@ def expand_calls(focal_method: str, enclosing_file_text: str, index: ProjectInde
                     continue
                 out.append((f"{md.class_name}.{md.name}", md.body))
                 budget -= len(md.body)
-                frontier.append((_strip_comments(md.body), d - 1))
+                frontier.append((md.body, md.class_name, d - 1))
     return out
 
 

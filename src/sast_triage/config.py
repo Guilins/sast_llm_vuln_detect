@@ -38,9 +38,11 @@ BACKEND_OLLAMA = "ollama"
 BACKEND_ANTHROPIC = "anthropic"
 BACKEND_MUSE_SPARK = "muse-spark"
 BACKEND_DEEPSEEK = "deepseek"
+BACKEND_OPENROUTER = "openrouter"
 
 DEFAULT_MUSE_SPARK_MODEL = "muse-spark-1.3"
 DEFAULT_DEEPSEEK_MODEL = "deepseek-flash"
+DEFAULT_OPENROUTER_MODEL = "z-ai/glm-5.3-flash"
 
 
 @dataclass
@@ -54,7 +56,7 @@ class PipelineConfig:
     labels_file: Path = DEFAULT_LABELS_FILE
 
     # Robust (deep) model
-    backend: str = BACKEND_OLLAMA          # "ollama" | "anthropic" | "muse-spark" | "deepseek"
+    backend: str = BACKEND_OLLAMA          # "ollama" | "anthropic" | "muse-spark" | "deepseek" | "openrouter"
     robust_model: str = DEFAULT_ROBUST_MODEL     # Ollama model tag
     muse_spark_api_key: Optional[str] = None
     muse_spark_model: str = DEFAULT_MUSE_SPARK_MODEL
@@ -63,6 +65,9 @@ class PipelineConfig:
     deepseek_api_key: Optional[str] = None
     deepseek_model: str = DEFAULT_DEEPSEEK_MODEL
     deepseek_max_tokens: int = 8192
+    openrouter_api_key: Optional[str] = None
+    openrouter_model: str = DEFAULT_OPENROUTER_MODEL
+    openrouter_max_tokens: int = 8192
     anthropic_model: str = DEFAULT_ANTHROPIC_MODEL
     anthropic_max_tokens: int = 16000     # room for thinking tokens + the batch's analyses
     anthropic_workspace_id: Optional[str] = None   # for keys not scoped to a workspace
@@ -120,6 +125,8 @@ class PipelineConfig:
             return self.muse_spark_model
         if self.backend == BACKEND_DEEPSEEK:
             return self.deepseek_model
+        if self.backend == BACKEND_OPENROUTER:
+            return self.openrouter_model
         return self.robust_model
 
     def effective_small_model(self) -> str:
@@ -128,7 +135,8 @@ class PipelineConfig:
 
     def concurrency(self) -> int:
         return (self.api_concurrency
-                if self.backend in (BACKEND_ANTHROPIC, BACKEND_MUSE_SPARK, BACKEND_DEEPSEEK)
+                if self.backend in (BACKEND_ANTHROPIC, BACKEND_MUSE_SPARK, BACKEND_DEEPSEEK,
+                                    BACKEND_OPENROUTER)
                 else 1)
 
     def small_concurrency(self) -> int:
@@ -189,6 +197,9 @@ class PipelineConfig:
             "deepseek_model": self.deepseek_model,
             "deepseek_max_tokens": self.deepseek_max_tokens,
             "deepseek_api_key_set": bool(self.deepseek_api_key),
+            "openrouter_model": self.openrouter_model,
+            "openrouter_max_tokens": self.openrouter_max_tokens,
+            "openrouter_api_key_set": bool(self.openrouter_api_key),
             "cross_file_context": self.cross_file_context,
             "auto_confirm_classes": list(self.auto_confirm_classes or ()),
             "anthropic_workspace_id_set": bool(self.anthropic_workspace_id),

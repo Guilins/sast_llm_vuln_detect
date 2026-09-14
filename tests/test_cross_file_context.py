@@ -77,6 +77,43 @@ class CrossFileTree(unittest.TestCase):
         self.assertEqual(len(blocks), 1)
 
 
+DATABASE_HELPER = """package org.owasp.benchmark.helpers;
+public class DatabaseHelper {
+    void executeSQLCommand(String sql) throws Exception {
+        Statement stmt = getConnection().createStatement();
+        int rc = stmt.executeUpdate(sql);
+        logResult(rc);
+    }
+    private void logResult(int rc) {
+        System.out.println(rc);
+    }
+}
+"""
+
+
+class SameClassUnqualifiedCalls(unittest.TestCase):
+    """The documented gap: the old regex (``Recv.method(``) only ever matched a
+    receiver-qualified call, so a bare call to a sibling method in the *same* class
+    (``logResult(rc)``, no ``this.``) was invisible to cross-file expansion. A real
+    parser knows the enclosing class of an unqualified call, so this must now resolve."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        (self.root / "org" / "owasp" / "benchmark" / "helpers").mkdir(parents=True)
+        path = self.root / "org" / "owasp" / "benchmark" / "helpers" / "DatabaseHelper.java"
+        path.write_text(DATABASE_HELPER)
+        self.index = ProjectIndex.build(self.root)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_bare_same_class_call_resolves(self):
+        focal = self.index.methods["DatabaseHelper"]["executeSQLCommand"][0].body
+        blocks = dict(expand_calls(focal, DATABASE_HELPER, self.index))
+        self.assertIn("DatabaseHelper.logResult", blocks)
+
+
 class TestAutoConfirm(unittest.TestCase):
     def test_auto_confirm_class_matching(self):
         from types import SimpleNamespace

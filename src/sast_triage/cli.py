@@ -29,7 +29,7 @@ def add_config_args(parser: argparse.ArgumentParser):
     g.add_argument("--progress", type=Path, default=defaults.progress_file, dest="progress_file")
     g.add_argument("--triage-report", type=Path, default=defaults.triage_report_file, dest="triage_report_file")
     g.add_argument("--labels", type=Path, default=defaults.labels_file, dest="labels_file")
-    g.add_argument("--backend", choices=("ollama", "anthropic", "muse-spark", "deepseek"),
+    g.add_argument("--backend", choices=("ollama", "anthropic", "muse-spark", "deepseek", "openrouter"),
                    default=defaults.backend, help="robust-stage backend (default: ollama / local)")
     g.add_argument("--robust-model", default=defaults.robust_model, help="Ollama model tag")
     g.add_argument("--muse-spark-model", default=defaults.muse_spark_model)
@@ -39,6 +39,10 @@ def add_config_args(parser: argparse.ArgumentParser):
                    help="pass-through reasoning_effort value (unconfirmed param name for this API)")
     g.add_argument("--deepseek-model", default=defaults.deepseek_model)
     g.add_argument("--deepseek-max-tokens", type=int, default=defaults.deepseek_max_tokens,
+                   help="output budget per call - reasoning tokens (if any) share this, so keep it generous")
+    g.add_argument("--openrouter-model", default=defaults.openrouter_model,
+                   help="any model ID OpenRouter hosts, e.g. 'z-ai/glm-5.3-flash:free'")
+    g.add_argument("--openrouter-max-tokens", type=int, default=defaults.openrouter_max_tokens,
                    help="output budget per call - reasoning tokens (if any) share this, so keep it generous")
     g.add_argument("--anthropic-model", default=defaults.anthropic_model)
     g.add_argument("--anthropic-max-tokens", type=int, default=defaults.anthropic_max_tokens)
@@ -114,6 +118,9 @@ def build_config(args) -> PipelineConfig:
         deepseek_api_key=os.environ.get("DEEPSEEK_API_KEY") or None,
         deepseek_model=args.deepseek_model,
         deepseek_max_tokens=args.deepseek_max_tokens,
+        openrouter_api_key=os.environ.get("OPENROUTER_API_KEY") or None,
+        openrouter_model=args.openrouter_model,
+        openrouter_max_tokens=args.openrouter_max_tokens,
         anthropic_model=args.anthropic_model,
         anthropic_max_tokens=args.anthropic_max_tokens,
         anthropic_workspace_id=args.anthropic_workspace_id or os.environ.get("ANTHROPIC_WORKSPACE_ID"),
@@ -205,6 +212,9 @@ def cmd_analyze(args):
         return 2
     if config.backend == "deepseek" and not config.deepseek_api_key:
         print("✗ --backend deepseek needs DEEPSEEK_API_KEY in the environment.")
+        return 2
+    if config.backend == "openrouter" and not config.openrouter_api_key:
+        print("✗ --backend openrouter needs OPENROUTER_API_KEY in the environment.")
         return 2
     answer_question(config)
     return 0

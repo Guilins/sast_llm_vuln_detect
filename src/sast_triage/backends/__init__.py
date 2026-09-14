@@ -50,6 +50,13 @@ def make_robust_model(config: PipelineConfig):
             raise RuntimeError("--backend deepseek needs DEEPSEEK_API_KEY in the environment.")
         return DeepSeekChatAdapter(config.deepseek_api_key, model=config.deepseek_model,
                                    max_tokens=config.deepseek_max_tokens, timeout=config.timeout)
+    if config.backend == "openrouter":
+        from .openrouter import OpenRouterChatAdapter
+
+        if not config.openrouter_api_key:
+            raise RuntimeError("--backend openrouter needs OPENROUTER_API_KEY in the environment.")
+        return OpenRouterChatAdapter(config.openrouter_api_key, model=config.openrouter_model,
+                                     max_tokens=config.openrouter_max_tokens, timeout=config.timeout)
     return make_ollama_model(config.robust_model, config.num_ctx, config.timeout,
                              think=config.ollama_think,
                              num_predict=config.ollama_num_predict or _default_num_predict(config.batch_size))

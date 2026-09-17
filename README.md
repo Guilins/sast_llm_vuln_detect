@@ -566,3 +566,10 @@ muse-spark` needs `MUSE_SPARK_API_KEY`; `--backend deepseek` needs `DEEPSEEK_API
 ```bash
 cd tests && python -m unittest discover -p "test_*.py"
 ```
+
+## License
+
+The pipeline code is licensed under the [MIT License](LICENSE). Files under `data/` and
+`results/` contain excerpts of [OWASP BenchmarkJava](https://github.com/OWASP-Benchmark/BenchmarkJava)
+(source code snippets and its expected-results labels), which remain under their original
+GPL-2.0 license.

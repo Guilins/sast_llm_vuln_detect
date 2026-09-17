@@ -1,0 +1,10 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02152.java:71:13-71:97:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+  "key": {
+    "A": "Claude Haiku 4.5",
+    "B": "qwen3.5:9b",
+    "C": "DeepSeek V4.1 Flash",
+    "D": "GLM-5.3-Flash",
+    "E": "Meta Muse Spark 1.3"
+  }
+}

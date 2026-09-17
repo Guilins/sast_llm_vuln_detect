@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest00568.java:87:13-87:47:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only, no literal call. Side advice: 'ensure all user-supplied segments are properly escaped for the shell', shell escaping offered as an option, which is the bypassable control (as with SQL escaping in findings 5-7)."},
+    "B": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only. Side advice: allowlist ^[A-Za-z0-9_-]+$ still permits a leading '-', so an argument like -la is accepted as an option to ls (same issue as calibration finding 4)."},
+    "C": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Correct restructuring described (discrete argument array, no shell, prefer java.nio.file over shelling out) but never written as code."},
+    "D": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only; names ProcessBuilder with one token per argument but writes no call. Also says 'ProcessBuilder.exec', which is not a real method (Runtime.exec / ProcessBuilder.start)."},
+    "E": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only. Side advice: 'reject/escape shell metacharacters' offers escaping as an acceptable alternative."}
+  }
+}

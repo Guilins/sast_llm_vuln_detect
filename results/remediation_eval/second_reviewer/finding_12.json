@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest00028.java:57:13-57:64:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "No literal call; the fix is prose and never uses FilenameUtils.getName. Its protection is a 'path starts with base directory' check, bypassable without a trailing separator (testfiles_evil)."},
+    "B": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call FilenameUtils.getName(param). Side advice: getCanonicalPath().startsWith(canonicalBase) prefix check is bypassable without a trailing separator."},
+    "C": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call FilenameUtils.getName(param). Side advice: 'verify it starts with the intended base directory' prefix check, same bypass."},
+    "D": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "FilenameUtils.getName() named with no argument; the canonical check is phrased as containment ('stays within'), which is correct, but nothing is applied to param in code."},
+    "E": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call FilenameUtils.getName(param). Side advice: 'still starts with the canonical base directory' prefix check, same bypass."}
+  }
+}

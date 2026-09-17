@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02455.java:55:25-55:53:java.lang.security.audit.sqli.jdbc-sqli.jdbc-sqli",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": false,
+          "why": "Generic; restates the scanner message with no code."},
+    "B": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal code: ('foo', ?), setString(1, bar), executeUpdate(). Every placeholder bound."},
+    "C": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal code with (?, ?), setString(1, \"foo\"), setString(2, bar). Side advice: database-specific escaping as a dynamic-SQL fallback (OWASP discourages), consistent with findings 5 and 6."},
+    "D": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal calls with arguments: connection.prepareStatement(\"... ('foo',?)\") and setString(1, bar). Same form graded Adequada in finding 6 (B); execute call is plumbing."},
+    "E": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal code: conn.prepareStatement(\"... ('foo',?)\") and ps.setString(1, bar). hideSQLErrors advice is sound."}
+  }
+}

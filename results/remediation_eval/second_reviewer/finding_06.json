@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest00018.java:59:25-59:53:java.lang.security.audit.sqli.jdbc-sqli.jdbc-sqli",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal code: ('foo', ?) keeps the literal, prepareStatement(sql), setString(1, param), executeUpdate(). Every placeholder bound."},
+    "B": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal calls with arguments inline: connection.prepareStatement(\"... ('foo', ?)\") and setString(1, param). One placeholder, bound."},
+    "C": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal code, same as A. Side advice: ESAPI encodeForSQL escaping as a fallback is discouraged by OWASP, and an Oracle codec does not match this database."},
+    "D": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "VALUES (?,?) with 'setString' and no arguments: prose, and only one user value exists, so it fails as written."},
+    "E": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": false,
+          "why": "Generic; restates the scanner message."}
+  }
+}

@@ -37,7 +37,7 @@ Official **OWASP Benchmark v1.2** scorecard (`scripts/benchmark_scorecard.py` +
 |---|---|---|---|---|---|---|---|
 | Raw Semgrep (no triage) | 88.1% | 44.1% | 43.96% | $0 | seconds | — | — |
 | local qwen3.5:9b | 83.5% | 27.9% | 55.64% | $0 | ~6h14m* | 2.0% | **tree-sitter** |
-| Haiku 4.5 | 83.4% | 19.9% | 63.54% | ~$7.67 | ~26m | 9.0% | **tree-sitter** |
+| Haiku 4.5 | 83.4% | 19.9% | 63.54% | ~$8.41† | ~26m | 9.0% | **tree-sitter** |
 | Muse Spark 1.3 (contributor) | 87.6% | 19.4% | 68.12% | $0.84 | ~1h18m | 23.2% | **tree-sitter** |
 | Sonnet 5 (skeptical prompt, xhigh effort) | 87.3% | 32.5% | 54.83% | ~$39 | not recorded | 0.9% | regex *(pending re-run)* |
 | DeepSeek V4.1 Flash | 85.9% | 16.2% | 69.70% | $2.22 | ~52m** | 2.0% | **tree-sitter** |
@@ -55,6 +55,19 @@ speed.
 \*\* Across two attempts: the first hit a balance-based rate limit partway through and
 a resume hit a hard "insufficient balance" error; total reflects both attempts plus a
 short pause for a top-up, not pure inference time.
+
+† **Corrected (2026-09-16): this row previously said ~$7.67, which undercounted the run.**
+The Anthropic runs (Haiku and Sonnet) are the only ones that used the Layer 2 small-model
+screen, and the pipeline records that cost separately from Layer 3. `results/haiku_treesitter.json` has
+`deep_model.token_usage.cost_usd` = 7.6686 (Layer 3, 1,630 calls) and
+`deep_model.small_model_token_usage.cost_usd` = 0.7374 (Layer 2, 717 calls, also Haiku),
+so the run cost ~$8.41. The old figure came from the run log's final summary line
+(`robust tokens: ... ~$7.67`), which only prints the Layer 3 tokens. Both values are
+token counts × list price ($1/M in, $5/M out), not an invoice; the Anthropic console is
+the authoritative number. The "before" ~$4 in the tree-sitter comparison below comes
+from an older run that also used Layer 2 but didn't record cost in its output file, so
+whether it included the screen isn't known. Sonnet's ~$39 is unaffected once rounded:
+`results/llm_enhanced_sast.json` has $38.68 for Layer 3 plus $0.74 for Layer 2, or ~$39.42.
 
 Times come from log file birth/modification timestamps, not instrumented profiling —
 treat them as ballpark, not precise. Sonnet's original run log wasn't preserved, so its
@@ -90,7 +103,7 @@ free local model a solid double-digit jump:
 |---|---|---|---|---|
 | local qwen3.5:9b | 47.54% | 55.64% | ~3.3% → 2.0% | $0 → $0 |
 | Muse Spark 1.3 | 52.39% | 68.12% | 47.6% → 23.2% | $0.93 → $0.84 |
-| Haiku 4.5 | 47.59% | 63.54% | ~low → 9.0% | ~$4 → $7.67 |
+| Haiku 4.5 | 47.59% | 63.54% | ~low → 9.0% | ~$4 → $8.41† |
 | DeepSeek V4.1 Flash | 55.12% | 69.70% | 2.1% → 2.0% | $3.12 → $2.22 |
 
 Muse Spark's old 47.6% Inconclusive rate specifically was never the model being overly
@@ -327,6 +340,135 @@ pipeline's existing fatal-error detection and abort the batch cleanly instead of
 retrying into a wall, but only a real top-up (or lower `--api-concurrency`, for the 429
 case) gets the run moving again.
 
+### Remediation suggestion quality (manual evaluation, in progress)
+
+Every robust-model verdict also carries a `remediation` field (present in 87–100% of each
+model's analyses), but the benchmark scorecard only measures verdicts, not whether the
+suggested fix is any good. This evaluation grades those suggestions by hand. No new model
+runs are involved; it reads the existing tree-sitter run outputs.
+
+**Sample.** Only findings that are real vulnerabilities (ground truth TP) and that *all
+five* models classified correctly, so every model is graded on identical input. Findings
+are drawn at random within the four categories below. For each one, the five suggestions
+are shuffled and labeled A–E, and which model wrote which is revealed only after grading.
+
+**Grading scale.**
+
+| Grade | Meaning |
+|---|---|
+| Adequate | A **literal code call applied to the vulnerable value** (e.g. `setString(1, bar)`, `Encode.forHtml(bar)`, `FilenameUtils.getName(bar)`), using an API that really exists, that fixes this code as written. Applies to every category. |
+| Partial | Right idea, but generic, only names classes/APIs in prose, calls an API that doesn't exist, would fail as written, or offers a poor fix as an equal alternative. |
+| Inadequate | Wrong, or doesn't fix the issue. |
+
+Supporting rules: flawed side advice is recorded but never lowers the grade. It covers
+outdated practice (removing `X-XSS-Protection: 0`, which re-enables the deprecated filter),
+a bypassable control offered as the protection itself (escaping instead of parameterized
+queries, an allowlist regex that still accepts `..`), *and* a weak control offered as an
+extra layer behind an otherwise correct fix (a canonical `startsWith` prefix check with no
+trailing separator). The last case is deliberate: a suggestion that pads a good fix with a
+control that doesn't hold up is still telling the developer something wrong. Plumbing such
+as obtaining a JDBC `Connection` or adding a dependency isn't required. Each suggestion also records whether it
+goes **beyond the scanner's hint**, i.e. adds code-specific substance instead of repeating
+the fix Semgrep's own message already named, since that message is part of the model's
+prompt.
+
+**Expected fix per category.**
+
+| Category | Adequate fix |
+|---|---|
+| SQL injection (CWE-89) | Parameterized query: `PreparedStatement` with every `?` bound |
+| XSS (CWE-79) | HTML output encoding of the value before writing it |
+| Path traversal (CWE-22) | Strip directory components, or canonicalize and check containment against `base + File.separator` |
+| Command injection (CWE-78) | Remove the shell (`sh -c` / `cmd.exe /c`) from the value's path: a Java API, or direct execution with separate arguments plus an allowlist |
+
+**Calibration, disclosed.** The rules were not fixed in advance. Findings 1–4 (one per
+category) were graded jointly and each disagreement became a written rule. Examples:
+correct-but-generic counts as Partial; a nonexistent API (`HtmlEncoder.encode`) counts as
+Partial; a poor alternative offered as an equal option caps the grade at Partial; a literal
+code call is required everywhere, including restructuring fixes. All four were then
+re-graded under the final rules, so they sit in the same data pool as the rest. The rules
+were frozen after finding 4 (SHA-256 recorded in the grades file), and every grade change
+made during calibration is kept in the file's history. Because the rules were shaped on
+these four, results are reported **with and without** them.
+
+**Independent phase.** 11 more findings (3 SQLi, 3 XSS, 3 path traversal, 2 command
+injection) are graded under the frozen rules. The second reviewer's grades are written to
+a file *before* the primary grader answers, which gives an inter-rater agreement figure
+that the jointly graded calibration findings can't provide.
+
+**Things this already surfaced** (from the calibration findings, so illustrative rather
+than measured):
+
+- A suggestion calling a Java API that doesn't exist: `HtmlEncoder.encode(bar)` (qwen). It
+  isn't in the project's dependencies or any common Java library; the name matches .NET's
+  `System.Text.Encodings.Web.HtmlEncoder`.
+- A recommendation that would leave the code vulnerable: Apache Commons Lang
+  `StringEscapeUtils` for shell escaping (Haiku). Checked against `commons-lang3` 3.20.0,
+  which only escapes CSV, JavaScript, HTML, Java, JSON and XML.
+- A containment check with a real bypass: comparing a canonical path against the canonical
+  base directory with a plain prefix check (Muse Spark, Haiku). Canonical paths drop the
+  trailing separator, so `testfiles_evil/x` passes a check for `testfiles`. Verified by
+  running it in Java.
+- 4 of 5 models recommended re-enabling `X-XSS-Protection`, which current OWASP guidance
+  advises against. The benchmark code's `X-XSS-Protection: 0` is actually today's
+  recommended value.
+- Under the strict rule, no model reached Adequate on command injection. The better models
+  gave the right approach but never wrote the code, so this reflects a lack of code-level
+  fixes for restructuring problems, not wrong advice.
+
+<!-- remediation-results:start -->
+
+*Generated from `results/remediation_eval/grades.json` by `scripts/remediation_report.py`. Findings graded so far: 16 (4 calibration, 12 independent; planned: 4 calibration + 12 independent).*
+
+**All findings (calibration + independent)**
+
+| Model | n | Adequate | Partial | Inadequate | Beyond scanner hint | Flawed side advice |
+|---|---|---|---|---|---|---|
+| Claude Haiku 4.5 | 16 | 11 (69%) | 5 | 0 | 16/16 | 6/16 |
+| DeepSeek V4.1 Flash | 16 | 10 (62%) | 6 | 0 | 16/16 | 9/16 |
+| GLM-5.3-Flash | 16 | 8 (50%) | 8 | 0 | 16/16 | 9/16 |
+| Meta Muse Spark 1.3 | 16 | 4 (25%) | 12 | 0 | 16/16 | 7/16 |
+| qwen3.5:9b | 16 | 0 (0%) | 16 | 0 | 7/16 | 5/16 |
+
+**Independent findings only** (sensitivity check)
+
+| Model | n | Adequate | Partial | Inadequate | Beyond scanner hint | Flawed side advice |
+|---|---|---|---|---|---|---|
+| Claude Haiku 4.5 | 12 | 9 (75%) | 3 | 0 | 12/12 | 3/12 |
+| DeepSeek V4.1 Flash | 12 | 7 (58%) | 5 | 0 | 12/12 | 8/12 |
+| GLM-5.3-Flash | 12 | 6 (50%) | 6 | 0 | 12/12 | 8/12 |
+| Meta Muse Spark 1.3 | 12 | 3 (25%) | 9 | 0 | 12/12 | 5/12 |
+| qwen3.5:9b | 12 | 0 (0%) | 12 | 0 | 6/12 | 3/12 |
+
+**Inter-rater agreement (independent findings)**
+
+56/60 suggestions graded identically (93%); Cohen's kappa = 0.86. Computed on the blind grades, given before the second reviewer's grades were revealed. 17 suggestion(s) had answers (grade or Q3) revised after the reveal; the model tables use the final answers. Second reviewer is an LLM (Claude), so this measures how consistently the rules can be applied, not that the grades are correct.
+
+Restarted quizzes (primary grader restarted before any reveal; first attempt discarded and logged): #7 (`results/remediation_eval/second_reviewer/finding_07_restart_log.json`), #12 (`results/remediation_eval/second_reviewer/finding_12_restart_log.json`).
+
+**Per finding**
+
+| # | Phase | Category | Test case | DeepSeek V4.1 Flash | GLM-5.3-Flash | Claude Haiku 4.5 | Meta Muse Spark 1.3 | qwen3.5:9b |
+|---|---|---|---|---|---|---|---|---|
+| 1 | calibration | SQLi | `BenchmarkTest01890` | Adequate | Partial | Adequate | Partial | Partial |
+| 2 | calibration | XSS | `BenchmarkTest02128` | Adequate | Adequate | Partial | Partial | Partial |
+| 3 | calibration | Path | `BenchmarkTest02034` | Adequate | Adequate | Adequate | Adequate | Partial |
+| 4 | calibration | Cmd | `BenchmarkTest02152` | Partial | Partial | Partial | Partial | Partial |
+| 5 | independent | SQLi | `BenchmarkTest02287` | Partial | Partial | Adequate | Partial | Partial |
+| 6 | independent | SQLi | `BenchmarkTest00018` | Adequate | Adequate | Adequate | Partial | Partial |
+| 7 | independent | SQLi | `BenchmarkTest02455` | Adequate | Adequate | Adequate | Adequate | Partial |
+| 8 | independent | XSS | `BenchmarkTest02486` | Adequate | Adequate | Adequate | Adequate | Partial |
+| 9 | independent | XSS | `BenchmarkTest02327` | Adequate | Partial | Partial | Partial | Partial |
+| 10 | independent | XSS | `BenchmarkTest02493` | Adequate | Adequate | Adequate | Adequate | Partial |
+| 11 | independent | Path | `BenchmarkTest02469` | Adequate | Adequate | Adequate | Partial | Partial |
+| 12 | independent | Path | `BenchmarkTest00028` | Adequate | Adequate | Adequate | Partial | Partial |
+| 13 | independent | Path | `BenchmarkTest00222` | Partial | Partial | Adequate | Partial | Partial |
+| 14 | independent | Cmd | `BenchmarkTest01944` | Partial | Partial | Partial | Partial | Partial |
+| 15 | independent | Cmd | `BenchmarkTest00568` | Partial | Partial | Partial | Partial | Partial |
+| 16 | independent | Cmd | `BenchmarkTest02147` | Partial | Partial | Adequate | Partial | Partial |
+
+<!-- remediation-results:end -->
+
 ## Layout
 
 ```
@@ -359,6 +501,7 @@ tests/                       95 unit tests, no network / no Ollama needed
 scripts/
   seed_labels.py             seed data/labels/ from the Benchmark ground truth
   benchmark_scorecard.py     turn a pipeline output into a scorable Semgrep file
+  remediation_report.py      render the manual remediation evaluation into README.md
   repair_broken_findings.py  recover findings from raw failed-batch dumps
 data/
   semgrep/Semgrep-v1.0-results.json   the scan under triage

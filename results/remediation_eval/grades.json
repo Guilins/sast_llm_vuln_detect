@@ -1,0 +1,1418 @@
+{
+  "rules": {
+    "Adequada": "A literal code call applied to the vulnerable value (e.g. setString(1, bar), Encode.forHtml(bar), FilenameUtils.getName(bar)), using a real API, that fixes the sink in this code as written. Applies to every category, including restructuring fixes such as command injection.",
+    "Parcial": "Right idea but no literal code call on the value (generic, or only API/class names or prose), a call to an API that does not exist, a call that would fail as written, or a poor alternative offered as an equal option.",
+    "Inadequada": "Wrong, or does not fix the issue.",
+    "side_advice": "Outdated or weak side advice does not lower the grade; record it as q3 = 'Yes, minor' and note it.",
+    "not_required": "Infrastructure plumbing (obtaining a Connection, adding a library dependency) is not required for Adequada.",
+    "ambiguous_wording": "Read ambiguous variable references (e.g. quoted 'bar') by evident intent.",
+    "poor_alternative": "A poor alternative fix presented as an equal option caps the grade at Parcial, since a developer could choose it.",
+    "beyond_scanner_hint": "true if the suggestion adds code-specific substance beyond the fix already named in Semgrep's message; false if it only repeats it.",
+    "q2": "Yes only when the suggestion meets the Adequada concreteness rule (literal call, real API, works as written)."
+  },
+  "findings": [
+    {
+      "n": 1,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest01890.java:73:25-73:92:java.lang.security.audit.sqli.jdbc-sqli.jdbc-sqli",
+      "category": "sqli",
+      "grades": {
+        "qwen3.5:9b": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false
+        },
+        "Claude Haiku 4.5": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true
+        },
+        "GLM-5.3-Flash": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "grade_history": [
+            "Adequada"
+          ],
+          "note": "prepareStatement written as code, but the binding on the value only described (setString() without arguments)."
+        }
+      },
+      "note": "second reviewer agreed on all five",
+      "scanner_hint": "PreparedStatement via connection.prepareStatement",
+      "phase": "calibration"
+    },
+    {
+      "n": 2,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02128.java:49:9-49:40:java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer",
+      "category": "xss",
+      "grades": {
+        "GLM-5.3-Flash": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true
+        },
+        "qwen3.5:9b": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "grade_before_calibration": "Adequada",
+          "note": "Recommends re-enabling X-XSS-Protection (outdated guidance).",
+          "beyond_scanner_hint": true
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "note": "Recommends re-enabling X-XSS-Protection (outdated guidance).",
+          "beyond_scanner_hint": true
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "note": "Recommends re-enabling X-XSS-Protection (outdated guidance).",
+          "beyond_scanner_hint": true
+        },
+        "Claude Haiku 4.5": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "note": "Recommends re-enabling X-XSS-Protection (outdated guidance).",
+          "beyond_scanner_hint": true
+        }
+      },
+      "note": "Grades after calibration; agreed by both reviewers.",
+      "scanner_hint": "view technology such as JSF (auto-escaping)",
+      "phase": "calibration"
+    },
+    {
+      "n": 3,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02034.java:66:34-67:92:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+      "category": "path-traversal",
+      "grades": {
+        "Meta Muse Spark 1.3": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "note": "Canonical prefix check without trailing separator is bypassable (e.g. testfiles_evil); safe overall because FilenameUtils.getName is also given."
+        },
+        "qwen3.5:9b": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false,
+          "note": "Poor alternative offered as equal option (disable param->bar), capped at Parcial."
+        },
+        "Claude Haiku 4.5": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "note": "Canonical prefix check without trailing separator is bypassable (e.g. testfiles_evil); safe overall because FilenameUtils.getName is also given."
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true
+        },
+        "GLM-5.3-Flash": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true
+        }
+      },
+      "status": "final",
+      "scanner_hint": "FilenameUtils.getName(...)",
+      "phase": "calibration"
+    },
+    {
+      "n": 4,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02152.java:71:13-71:97:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+      "category": "cmdi",
+      "scanner_hint": "avoid OS commands with user input, or whitelist values",
+      "grades": {
+        "Claude Haiku 4.5": {
+          "letter": "A",
+          "q1": "Partially",
+          "q2": "No",
+          "q3": "Yes, serious",
+          "grade": "Parcial",
+          "note": "Recommends Apache Commons Lang StringEscapeUtils for command escaping; verified it has no shell escaper (lang3 3.20.0). Poor alternative.",
+          "beyond_scanner_hint": true
+        },
+        "qwen3.5:9b": {
+          "letter": "B",
+          "q1": "Partially",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "C",
+          "q1": "Partially",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true
+        },
+        "GLM-5.3-Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "grade_history": [
+            "Adequada"
+          ],
+          "note": "Allowlist ^[a-zA-Z0-9._-]+$ still accepts '..' and leading '-' (option injection for ls).",
+          "beyond_scanner_hint": true
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "grade_history": [
+            "Adequada"
+          ],
+          "beyond_scanner_hint": true
+        }
+      },
+      "status": "final",
+      "phase": "calibration"
+    },
+    {
+      "n": 5,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02287.java:55:13-57:93:java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request",
+      "category": "sqli",
+      "phase": "independent",
+      "scanner_hint": "Use parameterized SQL queries (no API named)",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_05.json",
+      "second_reviewer_sha256_prefix": "ffcb92543ef29ce9",
+      "grades": {
+        "GLM-5.3-Flash": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Two placeholders (?, ?) but only bar bound, and binding described in prose: would fail as written."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Changed after seeing the second reviewer's reasoning: (?, ?) with only bar bound leaves the first placeholder unset (fails as written), and the binding is prose."
+        },
+        "Claude Haiku 4.5": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal code: prepareStatement with (?, ?), setString(1, \"foo\"), setString(2, bar), executeUpdate(). Real API, all placeholders bound."
+          }
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "Same (?, ?) with only bar bound, in prose. Suggests database-specific escaping as a dynamic-SQL fallback, which OWASP discourages."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Changed after seeing the second reviewer's reasoning: (?, ?) with only bar bound leaves the first placeholder unset (fails as written), and the binding is prose. Q3: 'database-specific escaping' as fallback is discouraged by OWASP."
+        },
+        "qwen3.5:9b": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Generic; repeats the scanner's 'use parameterized queries' with no code."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Names setString() for bar but no literal call with arguments."
+          },
+          "data_entry_fix": "Grade misclicked as Adequada; answers Q2=No already implied Parcial. Corrected, counted as the blind grade."
+        }
+      }
+    },
+    {
+      "n": 6,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest00018.java:59:25-59:53:java.lang.security.audit.sqli.jdbc-sqli.jdbc-sqli",
+      "category": "sqli",
+      "phase": "independent",
+      "scanner_hint": "PreparedStatement via connection.prepareStatement",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_06.json",
+      "second_reviewer_sha256_prefix": "df99dd231c0fb39a",
+      "grades": {
+        "Claude Haiku 4.5": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal code: ('foo', ?) keeps the literal, prepareStatement(sql), setString(1, param), executeUpdate(). Every placeholder bound."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal calls with arguments inline: connection.prepareStatement(\"... ('foo', ?)\") and setString(1, param). One placeholder, bound."
+          }
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal code, same as A. Side advice: ESAPI encodeForSQL escaping as a fallback is discouraged by OWASP, and an Oracle codec does not match this database."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: ESAPI encodeForSQL escaping as a dynamic-SQL fallback is discouraged by OWASP (same as finding 5), and the Oracle codec does not match HSQLDB. Grade unchanged."
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "VALUES (?,?) with 'setString' and no arguments: prose, and only one user value exists, so it fails as written."
+          }
+        },
+        "qwen3.5:9b": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Generic; restates the scanner message."
+          }
+        }
+      }
+    },
+    {
+      "n": 7,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02455.java:55:25-55:53:java.lang.security.audit.sqli.jdbc-sqli.jdbc-sqli",
+      "category": "sqli",
+      "phase": "independent",
+      "scanner_hint": "PreparedStatement via connection.prepareStatement",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_07.json",
+      "second_reviewer_sha256_prefix": "e450d886e8c9712a",
+      "restart": {
+        "file": "results/remediation_eval/second_reviewer/finding_07_restart_log.json",
+        "summary": "Primary grader restarted the quiz after suggestion B, before any second-reviewer grades or model key were revealed. Grader asked whether the hardcoded 'foo' username should be changed by the fix. Clarification given (existing rule, not a rule change): 'foo' is a constant, not injectable; a fix must parameterize the user value and preserve behaviour. ('foo', ?) with setString(1, value) and (?, ?) binding both are equally valid; (?, ?) binding only the user value fails as written."
+      },
+      "grades": {
+        "qwen3.5:9b": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Generic; restates the scanner message with no code."
+          }
+        },
+        "Claude Haiku 4.5": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal code: ('foo', ?), setString(1, bar), executeUpdate(). Every placeholder bound."
+          }
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal code with (?, ?), setString(1, \"foo\"), setString(2, bar). Side advice: database-specific escaping as a dynamic-SQL fallback (OWASP discourages), consistent with findings 5 and 6."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal calls with arguments: connection.prepareStatement(\"... ('foo',?)\") and setString(1, bar). Same form graded Adequada in finding 6 (B); execute call is plumbing."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal code: conn.prepareStatement(\"... ('foo',?)\") and ps.setString(1, bar). hideSQLErrors advice is sound."
+          }
+        }
+      }
+    },
+    {
+      "n": 8,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02486.java:52:9-52:96:java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer",
+      "category": "xss",
+      "phase": "independent",
+      "scanner_hint": "view technology such as JSF (no encoder named)",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_08.json",
+      "second_reviewer_sha256_prefix": "01ee6e80b8e78769",
+      "grades": {
+        "DeepSeek V4.1 Flash": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call Encode.forHtml(bar), real API, works in the printf args. Side advice: removing X-XSS-Protection: 0 re-enables the legacy filter, against current OWASP guidance (same as calibration finding 2)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: recommends removing X-XSS-Protection: 0, which re-enables the deprecated filter against current OWASP guidance (as in calibration finding 2). Grade unchanged."
+        },
+        "qwen3.5:9b": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Generic 'encode user input', no API or call. Adds encoding beyond the template-only hint."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call Encode.forHtml(bar). Side advice: remove X-XSS-Protection: 0 (outdated)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: recommends removing X-XSS-Protection: 0, which re-enables the deprecated filter against current OWASP guidance (as in calibration finding 2). Grade unchanged."
+        },
+        "Claude Haiku 4.5": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal calls HtmlUtils.htmlEscape(bar) and StringEscapeUtils.escapeHtml4(bar) before printf; both real APIs (dependency is plumbing)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial"
+          },
+          "revised_after_reveal": "Bullet 3 gives literal calls HtmlUtils.htmlEscape(bar) and StringEscapeUtils.escapeHtml4(bar) before printf; real APIs, dependency is plumbing."
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call Encode.forHtml(bar); escapeHtml4 named as an equally sound alternative. Side advice: remove X-XSS-Protection: 0 (outdated)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: recommends removing X-XSS-Protection: 0, which re-enables the deprecated filter against current OWASP guidance (as in calibration finding 2). Grade unchanged."
+        }
+      }
+    },
+    {
+      "n": 9,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02327.java:66:13-66:69:java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer",
+      "category": "xss",
+      "phase": "independent",
+      "scanner_hint": "view technology such as JSF (no encoder named)",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_09.json",
+      "second_reviewer_sha256_prefix": "ea6567b9a8f32841",
+      "grades": {
+        "DeepSeek V4.1 Flash": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call Encode.forHtml(bar), real API. Side advice: remove X-XSS-Protection: 0 (outdated)."
+          }
+        },
+        "qwen3.5:9b": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "HtmlEncoder.encode() is not a Java library API (.NET), and has no argument. Nonexistent API caps at Parcial, as in calibration finding 2."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "Encode.forHtml named without being applied to bar (name only). Side advice: 'do not disable X-XSS-Protection' (outdated)."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "Encoder.forHtml / Encode.forHtmlContent named with no argument (and 'Encoder.forHtml' is the wrong class name). Side advice: remove X-XSS-Protection: 0."
+          }
+        },
+        "Claude Haiku 4.5": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Encoding 'bar' described in prose with empty-paren API names (Encoder.encodeForHTML(), StringEscapeUtils.escapeHtml4()); no literal call on the value."
+          }
+        }
+      }
+    },
+    {
+      "n": 10,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02493.java:54:13-54:69:java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer",
+      "category": "xss",
+      "phase": "independent",
+      "scanner_hint": "view technology such as JSF (no encoder named)",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_10.json",
+      "second_reviewer_sha256_prefix": "9e0520ba47199124",
+      "grades": {
+        "qwen3.5:9b": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "escapeHtml(bar) is not a real API as written (unqualified, no such JDK/library static method); 'or a dedicated HTML encoder' is generic."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "escapeHtml(bar) is not a real API as written (no such unqualified static method in the JDK or project imports); fails as written. Fallback 'dedicated HTML encoder' is generic."
+        },
+        "GLM-5.3-Flash": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call org.owasp.encoder.Encode.forHtml(bar). Side advice: remove X-XSS-Protection: 0 (outdated)."
+          }
+        },
+        "Claude Haiku 4.5": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call org.apache.commons.text.StringEscapeUtils.escapeHtml4(bar), real API. Side advice: remove/correct X-XSS-Protection header (outdated)."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call Encode.forHtml(bar). Side advice: remove X-XSS-Protection: 0."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: second bullet recommends removing X-XSS-Protection: 0 (outdated). Grade unchanged."
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call Encode.forHtml(bar). Side advice: remove or correct X-XSS-Protection: 0."
+          }
+        }
+      }
+    },
+    {
+      "n": 11,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02469.java:56:13-56:64:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+      "category": "path-traversal",
+      "phase": "independent",
+      "scanner_hint": "FilenameUtils.getName(...)",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_11.json",
+      "second_reviewer_sha256_prefix": "235fa8a0343d25be",
+      "grades": {
+        "qwen3.5:9b": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "FilenameUtils.getName() named with no argument and made conditional; primary advice is a '../' blocklist, which is bypassable and is offered as an equal option. Adds nothing beyond the Semgrep hint, which already names FilenameUtils.getName(...)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial"
+          },
+          "revised_after_reveal": "Q3 only, under the narrowed q3 rule: the '../' blocklist is the primary advice and is bypassable (..%2f, ..\\, absolute paths), with FilenameUtils.getName() named last and conditionally. Grade unchanged."
+        },
+        "Claude Haiku 4.5": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal call FilenameUtils.getName(bar), real API, fixes the sink as written; canonical containment check added correctly."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "FilenameUtils.getName named without an argument; main fix is a canonical startsWith check, which without a trailing separator is bypassable (testfiles_evil), as in calibration finding 3."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call FilenameUtils.getName(bar). Side advice: resolvedPath.startsWith(basePath) prefix check is bypassable without a trailing separator; harmless here because getName is also applied."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: resolvedPath.startsWith(basePath) is bypassable without a trailing separator (testfiles_evil), as in calibration finding 3. Harmless here because FilenameUtils.getName(bar) is also applied. Grade unchanged."
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal call FilenameUtils.getName(bar); containment check phrased as containment rather than a naive prefix match."
+          }
+        }
+      }
+    },
+    {
+      "n": 12,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest00028.java:57:13-57:64:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+      "category": "path-traversal",
+      "phase": "independent",
+      "scanner_hint": "FilenameUtils.getName(...)",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_12.json",
+      "second_reviewer_sha256_prefix": "e76e352a4f5a6c62",
+      "restart": {
+        "file": "results/remediation_eval/second_reviewer/finding_12_restart_log.json",
+        "summary": "Primary grader restarted the quiz after suggestion B, before any second-reviewer grades or model key were revealed. Requested by the primary grader; no clarification was given and no rule changed."
+      },
+      "grades": {
+        "qwen3.5:9b": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "No literal call; the fix is prose and never uses FilenameUtils.getName. Its protection is a 'path starts with base directory' check, bypassable without a trailing separator (testfiles_evil)."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call FilenameUtils.getName(param). Side advice: getCanonicalPath().startsWith(canonicalBase) prefix check is bypassable without a trailing separator."
+          }
+        },
+        "Claude Haiku 4.5": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call FilenameUtils.getName(param). Side advice: 'verify it starts with the intended base directory' prefix check, same bypass."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: bullet 3 'verify it starts with the intended base directory' is the same bypassable prefix check as calibration finding 3 (no trailing separator, so testfiles_evil passes), stated in prose rather than code. Grade unchanged."
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "FilenameUtils.getName() named with no argument; the canonical check is phrased as containment ('stays within'), which is correct, but nothing is applied to param in code."
+          },
+          "data_entry_fix": "Grade first entered as Adequada with Q2=No; grader confirmed Parcial before any reveal."
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "Yes, minor",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Literal call FilenameUtils.getName(param). Side advice: 'still starts with the canonical base directory' prefix check, same bypass."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada"
+          },
+          "revised_after_reveal": "Q3 only: bullet 2 'verify it still starts with the canonical base directory' is the same bypassable prefix check as calibration finding 3 (no trailing separator, so testfiles_evil passes), stated in prose rather than code. Grade unchanged."
+        }
+      }
+    },
+    {
+      "n": 13,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest00222.java:88:13-88:57:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+      "category": "path-traversal",
+      "phase": "independent",
+      "scanner_hint": "FilenameUtils.getName(...)",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_13.json",
+      "second_reviewer_sha256_prefix": "ee8a34eb9a75347b",
+      "grades": {
+        "GLM-5.3-Flash": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "FilenameUtils.getName() named with no argument, never applied to bar. Side advice: canonical path 'starts with TESTFILES_DIR' prefix check, bypassable without a trailing separator."
+          }
+        },
+        "Claude Haiku 4.5": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "No",
+            "grade": "Adequada",
+            "why": "Literal call FilenameUtils.getName(bar), real API, fixes the sink as written; the nio check is phrased as containment ('stays within'), which is correct."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "FilenameUtils.getName() with no argument. Side advice: 'reject if getCanonicalPath does not start with base', the bypassable prefix check."
+          }
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "FilenameUtils.getName(...) written with an ellipsis, never applied to bar. Side advice: 'verify startsWith the allowed base directory'. Output also carries a stray JSON artifact at the end."
+          }
+        },
+        "qwen3.5:9b": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "FilenameUtils.getName() with no argument. Side advice: 'checking if the result starts with the base directory', the bypassable prefix check."
+          }
+        }
+      }
+    },
+    {
+      "n": 14,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest01944.java:63:13-64:98:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+      "category": "cmdi",
+      "phase": "independent",
+      "scanner_hint": "avoid exec with user input, or use a whitelist of specific values",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_14.json",
+      "second_reviewer_sha256_prefix": "426ea243622468e9",
+      "grades": {
+        "Meta Muse Spark 1.3": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Right restructuring (ProcessBuilder with a separate argument array, no shell) but described in prose; no literal call applied to bar."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Prose only, no literal ProcessBuilder call. Best context of the five: correctly states that URLDecoder.decode and the ESAPI HTML encoding in printOSCommandResults protect nothing here."
+          }
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Correct approach (hard-code the command, pass input as a separate list argument) but no literal code. Output also carries a stray JSON artifact at the end."
+          }
+        },
+        "Claude Haiku 4.5": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Prose only; names ProcessBuilder with a separate argument array but never writes the call."
+          }
+        },
+        "qwen3.5:9b": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Generic; restates the Semgrep message (avoid exec, use a whitelist) with nothing code-specific."
+          }
+        }
+      }
+    },
+    {
+      "n": 15,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest00568.java:87:13-87:47:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+      "category": "cmdi",
+      "phase": "independent",
+      "scanner_hint": "avoid exec with user input, or use a whitelist of specific values",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_15.json",
+      "second_reviewer_sha256_prefix": "bc36115b4117003c",
+      "grades": {
+        "Claude Haiku 4.5": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "Prose only, no literal call. Side advice: 'ensure all user-supplied segments are properly escaped for the shell', shell escaping offered as an option, which is the bypassable control (as with SQL escaping in findings 5-7)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial"
+          },
+          "revised_after_reveal": "Q3 only: offers shell escaping as an acceptable option ('properly escaped for the shell being invoked'), the same bypassable control as SQL escaping in findings 5-7. Grade unchanged."
+        },
+        "GLM-5.3-Flash": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "Prose only. Side advice: allowlist ^[A-Za-z0-9_-]+$ still permits a leading '-', so an argument like -la is accepted as an option to ls (same issue as calibration finding 4)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial"
+          },
+          "revised_after_reveal": "Q3 only: allowlist ^[A-Za-z0-9_-]+$ still permits a leading '-', so input like -la is accepted as an option to ls (as in calibration finding 4). Grade unchanged."
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Correct restructuring described (discrete argument array, no shell, prefer java.nio.file over shelling out) but never written as code."
+          }
+        },
+        "qwen3.5:9b": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Prose only; names ProcessBuilder with one token per argument but writes no call. Also says 'ProcessBuilder.exec', which is not a real method (Runtime.exec / ProcessBuilder.start)."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "Prose only. Side advice: 'reject/escape shell metacharacters' offers escaping as an acceptable alternative."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial"
+          },
+          "revised_after_reveal": "Q3 only: offers escaping of shell metacharacters as an alternative to avoiding the shell. Grade unchanged."
+        }
+      }
+    },
+    {
+      "n": 16,
+      "finding": "org/owasp/benchmark/testcode/BenchmarkTest02147.java:57:13-57:43:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+      "category": "cmdi",
+      "phase": "independent",
+      "scanner_hint": "avoid exec with user input, or use a whitelist of specific values",
+      "second_reviewer_file": "results/remediation_eval/second_reviewer/finding_16.json",
+      "second_reviewer_sha256_prefix": "bd03fc1c19b953af",
+      "grades": {
+        "Claude Haiku 4.5": {
+          "letter": "A",
+          "q1": "Yes",
+          "q2": "Yes",
+          "q3": "No",
+          "grade": "Adequada",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "Yes",
+            "q3": "Yes, minor",
+            "grade": "Adequada",
+            "why": "Only suggestion in either cmdi finding that writes the restructuring as code: new ProcessBuilder(\"cmd.exe\", \"/c\", \"echo\", userInput).start(), with the tainted value as a discrete argument and no shell parsing ('userInput' read as bar by the ambiguous-wording rule). Side advice: it hardcodes cmd.exe, which does not exist on the non-Windows path this test actually runs on; a portability defect, not a security one."
+          }
+        },
+        "Meta Muse Spark 1.3": {
+          "letter": "B",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Correct approach in prose (separate argument array, no shell) but no call written."
+          }
+        },
+        "DeepSeek V4.1 Flash": {
+          "letter": "C",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Prose only; fixed command plus discrete argument list described but never written as code."
+          }
+        },
+        "GLM-5.3-Flash": {
+          "letter": "D",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "Yes, minor",
+          "grade": "Parcial",
+          "beyond_scanner_hint": true,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "Yes, minor",
+            "grade": "Parcial",
+            "why": "Prose only. Side advice: allowlist ^[A-Za-z0-9_-]+$ still permits a leading '-', accepted as an option by the invoked command (same as calibration finding 4 and finding 15)."
+          },
+          "blind": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial"
+          },
+          "revised_after_reveal": "Q3 only: allowlist ^[A-Za-z0-9_-]+$ still permits a leading '-', accepted as an option by the invoked command (as in calibration finding 4 and finding 15). Grade unchanged."
+        },
+        "qwen3.5:9b": {
+          "letter": "E",
+          "q1": "Yes",
+          "q2": "No",
+          "q3": "No",
+          "grade": "Parcial",
+          "beyond_scanner_hint": false,
+          "second_reviewer": {
+            "q1": "Yes",
+            "q2": "No",
+            "q3": "No",
+            "grade": "Parcial",
+            "why": "Generic; restates the Semgrep message (avoid exec, use a whitelist)."
+          }
+        }
+      }
+    }
+  ],
+  "calibration_log": [
+    "Finding 1: established that correct-but-generic counts as Parcial.",
+    "Finding 2: reviewers disagreed on 2/5 (qwen, Muse Spark). Rule refined to 'concrete code call + real API'. qwen changed Adequada -> Parcial (HtmlEncoder.encode is not a real Java API). Side advice decided not to affect grades.",
+    "Finding 3: reviewers disagreed on 1/5 (qwen). Added 'poor alternative caps at Parcial' (qwen stays Parcial). Q3 'Yes, minor' for Muse Spark and Haiku: canonical-path prefix check without trailing separator is bypassable (verified by running Java). Added beyond_scanner_hint field, backfilled for findings 1-3.",
+    "Finding 4: all suggestions lacked a literal code call. Rule set to 'literal code call, everywhere' (including restructuring fixes). Q2 redefined strictly and re-derived for findings 1-4. Consequence: GLM finding 1 Adequada -> Parcial (binding described in prose, same as Muse Spark finding 2); GLM and Muse Spark finding 4 Adequada -> Parcial."
+  ],
+  "rules_frozen": {
+    "frozen_after_finding": 4,
+    "sha256": "d1804aa4724916338e4a88038cac83b9a9e9e2d5b2e9b6f21a44395da0f89034",
+    "note": "Rules must not change during the independent phase; any change would require re-grading."
+  },
+  "sampling_plan": {
+    "calibration": "findings 1-4, one per category, graded jointly; kept in the pool, reported with and without.",
+    "independent": {
+      "sqli": 3,
+      "xss": 3,
+      "path-traversal": 3,
+      "cmdi": 3
+    },
+    "procedure": "Blind (A-E shuffle). Second reviewer grades are saved to a file before the user answers and revealed only after; model key revealed last.",
+    "plan_extension": "cmdi extended from 2 to 3 independent findings after finding 15, at the primary grader's request, so every category has 4 findings in total. Rules unchanged; the extra finding was graded blind under the same procedure."
+  }
+}

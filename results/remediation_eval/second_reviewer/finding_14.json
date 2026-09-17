@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest01944.java:63:13-64:98:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Right restructuring (ProcessBuilder with a separate argument array, no shell) but described in prose; no literal call applied to bar."},
+    "B": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only, no literal ProcessBuilder call. Best context of the five: correctly states that URLDecoder.decode and the ESAPI HTML encoding in printOSCommandResults protect nothing here."},
+    "C": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Correct approach (hard-code the command, pass input as a separate list argument) but no literal code. Output also carries a stray JSON artifact at the end."},
+    "D": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only; names ProcessBuilder with a separate argument array but never writes the call."},
+    "E": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": false,
+          "why": "Generic; restates the Semgrep message (avoid exec, use a whitelist) with nothing code-specific."}
+  }
+}

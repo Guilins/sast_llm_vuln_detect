@@ -1,0 +1,9 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest00028.java:57:13-57:64:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+  "event": "Primary grader restarted the quiz after suggestion B, before any second-reviewer grades or model key were revealed.",
+  "reason": "Requested by the primary grader; no clarification was given and no rule changed.",
+  "discarded_first_attempt": {
+    "A": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial"},
+    "B": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada"}
+  }
+}

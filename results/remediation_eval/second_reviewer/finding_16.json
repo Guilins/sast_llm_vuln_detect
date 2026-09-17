@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02147.java:57:13-57:43:java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Only suggestion in either cmdi finding that writes the restructuring as code: new ProcessBuilder(\"cmd.exe\", \"/c\", \"echo\", userInput).start(), with the tainted value as a discrete argument and no shell parsing ('userInput' read as bar by the ambiguous-wording rule). Side advice: it hardcodes cmd.exe, which does not exist on the non-Windows path this test actually runs on; a portability defect, not a security one."},
+    "B": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Correct approach in prose (separate argument array, no shell) but no call written."},
+    "C": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only; fixed command plus discrete argument list described but never written as code."},
+    "D": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Prose only. Side advice: allowlist ^[A-Za-z0-9_-]+$ still permits a leading '-', accepted as an option by the invoked command (same as calibration finding 4 and finding 15)."},
+    "E": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": false,
+          "why": "Generic; restates the Semgrep message (avoid exec, use a whitelist)."}
+  }
+}

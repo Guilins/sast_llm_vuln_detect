@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02469.java:56:13-56:64:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": false,
+          "why": "FilenameUtils.getName() named with no argument and made conditional; primary advice is a '../' blocklist, which is bypassable and is offered as an equal option. Adds nothing beyond the Semgrep hint, which already names FilenameUtils.getName(...)."},
+    "B": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call FilenameUtils.getName(bar), real API, fixes the sink as written; canonical containment check added correctly."},
+    "C": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "FilenameUtils.getName named without an argument; main fix is a canonical startsWith check, which without a trailing separator is bypassable (testfiles_evil), as in calibration finding 3."},
+    "D": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call FilenameUtils.getName(bar). Side advice: resolvedPath.startsWith(basePath) prefix check is bypassable without a trailing separator; harmless here because getName is also applied."},
+    "E": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call FilenameUtils.getName(bar); containment check phrased as containment rather than a naive prefix match."}
+  }
+}

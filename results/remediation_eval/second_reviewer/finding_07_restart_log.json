@@ -1,0 +1,9 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02455.java:55:25-55:53:java.lang.security.audit.sqli.jdbc-sqli.jdbc-sqli",
+  "event": "Primary grader restarted the quiz after suggestion B, before any second-reviewer grades or model key were revealed.",
+  "reason": "Grader asked whether the hardcoded 'foo' username should be changed by the fix. Clarification given (existing rule, not a rule change): 'foo' is a constant, not injectable; a fix must parameterize the user value and preserve behaviour. ('foo', ?) with setString(1, value) and (?, ?) binding both are equally valid; (?, ?) binding only the user value fails as written.",
+  "discarded_first_attempt": {
+    "A": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial"},
+    "B": {"q1": "Yes", "q2": "No", "q3": "Yes, serious", "grade": "Inadequada"}
+  }
+}

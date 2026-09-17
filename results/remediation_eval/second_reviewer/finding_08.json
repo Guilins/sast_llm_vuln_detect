@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02486.java:52:9-52:96:java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call Encode.forHtml(bar), real API, works in the printf args. Side advice: removing X-XSS-Protection: 0 re-enables the legacy filter, against current OWASP guidance (same as calibration finding 2)."},
+    "B": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Generic 'encode user input', no API or call. Adds encoding beyond the template-only hint."},
+    "C": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call Encode.forHtml(bar). Side advice: remove X-XSS-Protection: 0 (outdated)."},
+    "D": {"q1": "Yes", "q2": "Yes", "q3": "No", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal calls HtmlUtils.htmlEscape(bar) and StringEscapeUtils.escapeHtml4(bar) before printf; both real APIs (dependency is plumbing)."},
+    "E": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call Encode.forHtml(bar); escapeHtml4 named as an equally sound alternative. Side advice: remove X-XSS-Protection: 0 (outdated)."}
+  }
+}

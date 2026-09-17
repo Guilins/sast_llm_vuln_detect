@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02287.java:55:13-57:93:java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "No",  "q3": "No",         "grade": "Parcial",  "beyond_scanner_hint": true,
+          "why": "Two placeholders (?, ?) but only bar bound, and binding described in prose: would fail as written."},
+    "B": {"q1": "Yes", "q2": "Yes", "q3": "No",         "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal code: prepareStatement with (?, ?), setString(1, \"foo\"), setString(2, bar), executeUpdate(). Real API, all placeholders bound."},
+    "C": {"q1": "Yes", "q2": "No",  "q3": "Yes, minor", "grade": "Parcial",  "beyond_scanner_hint": true,
+          "why": "Same (?, ?) with only bar bound, in prose. Suggests database-specific escaping as a dynamic-SQL fallback, which OWASP discourages."},
+    "D": {"q1": "Yes", "q2": "No",  "q3": "No",         "grade": "Parcial",  "beyond_scanner_hint": false,
+          "why": "Generic; repeats the scanner's 'use parameterized queries' with no code."},
+    "E": {"q1": "Yes", "q2": "No",  "q3": "No",         "grade": "Parcial",  "beyond_scanner_hint": true,
+          "why": "Names setString() for bar but no literal call with arguments."}
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02486.java:52:9-52:96:java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer",
+  "key": {
+    "A": "DeepSeek V4.1 Flash",
+    "B": "qwen3.5:9b",
+    "C": "GLM-5.3-Flash",
+    "D": "Claude Haiku 4.5",
+    "E": "Meta Muse Spark 1.3"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest00222.java:88:13-88:57:java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal",
+  "key": {
+    "A": "GLM-5.3-Flash",
+    "B": "Claude Haiku 4.5",
+    "C": "Meta Muse Spark 1.3",
+    "D": "DeepSeek V4.1 Flash",
+    "E": "qwen3.5:9b"
+  }
+}

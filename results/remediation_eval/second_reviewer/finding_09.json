@@ -1,0 +1,17 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02327.java:66:13-66:69:java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer",
+  "reviewer": "Claude (LLM), graded before seeing the primary grader's answers",
+  "rules_sha256_prefix": "d1804aa472491633",
+  "grades": {
+    "A": {"q1": "Yes", "q2": "Yes", "q3": "Yes, minor", "grade": "Adequada", "beyond_scanner_hint": true,
+          "why": "Literal call Encode.forHtml(bar), real API. Side advice: remove X-XSS-Protection: 0 (outdated)."},
+    "B": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "HtmlEncoder.encode() is not a Java library API (.NET), and has no argument. Nonexistent API caps at Parcial, as in calibration finding 2."},
+    "C": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Encode.forHtml named without being applied to bar (name only). Side advice: 'do not disable X-XSS-Protection' (outdated)."},
+    "D": {"q1": "Yes", "q2": "No", "q3": "Yes, minor", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Encoder.forHtml / Encode.forHtmlContent named with no argument (and 'Encoder.forHtml' is the wrong class name). Side advice: remove X-XSS-Protection: 0."},
+    "E": {"q1": "Yes", "q2": "No", "q3": "No", "grade": "Parcial", "beyond_scanner_hint": true,
+          "why": "Encoding 'bar' described in prose with empty-paren API names (Encoder.encodeForHTML(), StringEscapeUtils.escapeHtml4()); no literal call on the value."}
+  }
+}

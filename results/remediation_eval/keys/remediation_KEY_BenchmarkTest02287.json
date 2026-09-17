@@ -1,0 +1,10 @@
+{
+  "finding": "org/owasp/benchmark/testcode/BenchmarkTest02287.java:55:13-57:93:java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request",
+  "key": {
+    "A": "GLM-5.3-Flash",
+    "B": "Claude Haiku 4.5",
+    "C": "DeepSeek V4.1 Flash",
+    "D": "qwen3.5:9b",
+    "E": "Meta Muse Spark 1.3"
+  }
+}

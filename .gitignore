@@ -31,3 +31,7 @@ progress/experiments/
 data/semgrep/Semgrep-subset.json
 data/semgrep/Semgrep-smoke.json
 data/labels/to_review.jsonl
+
+# Others
+paper/
+*.toml
